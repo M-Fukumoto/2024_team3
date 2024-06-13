@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -77,9 +76,10 @@ public class ClientUserShowController {
 	 * @return "admin/user/detail" 会員詳細表示画面へ
 	 * 
 	 */
-	@RequestMapping(path = "/Client/user/detail/{id}", method = { RequestMethod.GET, RequestMethod.POST })
-	public String showUser(@PathVariable int id, Model model) {
+	@RequestMapping(path = "/client/user/detail", method = { RequestMethod.GET, RequestMethod.POST })
+	public String showUser(Model model) {
 		// 表示対象の情報を取得
+		Integer id = ((UserBean) session.getAttribute("user")).getId();
 		User user = userRepository.findByIdAndDeleteFlag(id, Constant.NOT_DELETED);
 		if (user == null) {
 			// 対象が無い場合、エラー
@@ -97,7 +97,7 @@ public class ClientUserShowController {
 		session.removeAttribute("userForm");
 
 		// 詳細画面　表示
-		return "Client/user/detail";
+		return "client/user/detail";
 	}
 }
 

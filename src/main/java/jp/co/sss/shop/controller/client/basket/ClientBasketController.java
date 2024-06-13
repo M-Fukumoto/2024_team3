@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -19,6 +21,21 @@ public class ClientBasketController {
 	@Autowired
 	HttpSession session;
 
+	
+	// test
+	@RequestMapping("/client/basket/test")
+	public String basketTest(Model model) {
+		
+		return "/client/basket/list";
+	}
+	
+	/**
+	 * 買い物かご追加
+	 * @author sakagami ryosuke
+	 * 
+	 * @param itemId
+	 * @return
+	 */
 	@PostMapping("/client/basket/add")
 	public String addBasket(Integer itemId) {
 		// 買い物かごリストの宣言
@@ -56,5 +73,6 @@ public class ClientBasketController {
 		// カート一覧画面に遷移
 		return "redilect:/client/basket/list";
 	}
+	 
 
 }

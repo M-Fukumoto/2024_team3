@@ -66,7 +66,7 @@ public class ClientUserShowController {
 		session.removeAttribute("userForm");
 
 		// 一覧表示
-		return "Client/user/list";
+		return "admin/user/list";
 	}
 
 	/**

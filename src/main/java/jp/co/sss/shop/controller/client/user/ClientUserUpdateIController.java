@@ -139,12 +139,12 @@ public class ClientUserUpdateIController {
 			session.setAttribute("result", result);
 
 			//変更入力画面　表示処理
-			return "redirect:/client//user/update/input";
+			return "redirect:/client/user/update/input";
 
 		}
 
 		//変更確認画面　表示処理
-		return "redirect:/client//user/update/check";
+		return "redirect:/client/user/update/check";
 	}
 
 	/**

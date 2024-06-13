@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import jp.co.sss.shop.util.URLCheck;
 
 /**
@@ -31,7 +30,7 @@ public class LoginCheckFilter extends HttpFilter {
 			// セッション情報を取得
 			HttpSession session = request.getSession();
 
-			if (session.getAttribute("user") == null) {
+			if (session.getAttribute("user") == null && request.getRequestURI().contains("user/regist/")) {
 				// 不正アクセスの場合、ログイン画面にリダイレクト
 
 				// ログイン画面へリダイレクト

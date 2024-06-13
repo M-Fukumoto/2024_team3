@@ -43,4 +43,11 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	 * @return 商品エンティティ
 	 */
 	public Item findByNameAndDeleteFlag(String name, int notDeleted);
+	
+	/**
+	 * 商品を売れ筋順に表示
+	 * @return
+	 */
+	@Query("SELECT i FROM Item i RIGHT OUTER JOIN OrderItem o ON i.id = o.item.id WHERE i.deleteFlag = 0 GROUP BY i order by SUM(o.quantity) DESC")
+	public Item findAllByOrderByCountAllDesc();
 }

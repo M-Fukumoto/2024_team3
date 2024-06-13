@@ -30,7 +30,7 @@ public class LoginCheckFilter extends HttpFilter {
 			// セッション情報を取得
 			HttpSession session = request.getSession();
 
-			if (session.getAttribute("user") == null && !request.getRequestURI().contains("user/regist/")) {
+			if (session.getAttribute("user") == null && request.getRequestURI().contains("user/regist/")) {
 				// 不正アクセスの場合、ログイン画面にリダイレクト
 
 				// ログイン画面へリダイレクト

@@ -2,6 +2,7 @@ package jp.co.sss.shop.controller.client.basket;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,23 +28,21 @@ public class ClientBasketController {
 	HttpSession session;
 	@Autowired
 	ItemRepository iR;
-
-	/** 買い物かごリスト */
-	private List<BasketBean> basket;
-
-	// test用
+	List<BasketBean> basket;
+	
+	
+	// test
 	@RequestMapping("/client/basket/test")
 	public String basketTest(Model model) {
-
 		basket = new ArrayList<BasketBean>();
 		// 買い物かごにアイテムを追加
-		BasketBean bB = new BasketBean(1, "りんご", 0);
+		BasketBean bB = new BasketBean(1,"りんご",50);
 		bB.setOrderNum(5);
 		basket.add(bB);
 		session.setAttribute("basket", basket);
 		return "/client/basket/list";
 	}
-
+	
 	/**
 	 * 買い物かご一覧表示
 	 * @author sakagami ryosuke
@@ -51,17 +50,26 @@ public class ClientBasketController {
 	 */
 	@GetMapping("/client/basket/list")
 	public String basketList() {
-		// 在庫数を最新の状態に更新
-		for (int i = 0; i < basket.size(); i++) {
-			// カート内アイテムの取り出し
-			BasketBean bB = basket.get(i);
-			// 在庫状況を更新
-			bB.setStock(iR.getReferenceById(bB.getStock()).getStock());
+		//sessionから買い物かごを取得
+		basket = (List<BasketBean>) session.getAttribute("basket");
+		
+		// 買い物かごが存在する場合
+		if(Objects.nonNull(basket)) {
+			// 在庫数を最新の状態に更新
+			for (int i = 0; i < basket.size(); i++) {
+				// カート内アイテムの取り出し
+				BasketBean bB = basket.get(i);
+				// 在庫状況を更新
+				bB.setStock(iR.getReferenceById(bB.getId()).getStock());
+				// セッションに買い物かごデータを代入
+				session.setAttribute("basket", basket);
+			}
 		}
-		// カート一覧画面に遷移
+
+		
 		return "/client/basket/list";
 	}
-
+	
 	/**
 	 * 買い物かご追加
 	 * @author sakagami ryosuke
@@ -71,15 +79,14 @@ public class ClientBasketController {
 	 */
 	@PostMapping("/client/basket/add")
 	public String addBasket(Integer itemId) {
-
 		// セッションスコープに買い物かご情報があるかを確認
 		if (session.getAttribute("basket") == null) {
 			// なければ、買い物かご情報を生成
 			basket = new ArrayList<BasketBean>();
 			// アイテム情報を取得
-			Item item = iR.getReferenceById(itemId);
+			 Item item = iR.getReferenceById(itemId);
 			// 買い物かごにアイテムを追加
-			BasketBean bB = new BasketBean(item.getId(), item.getName(), item.getStock());
+			BasketBean bB = new BasketBean(item.getId(),item.getName(),item.getStock());
 			basket.add(bB);
 		} else {
 			// 買い物かごに追加対象の商品があるかを確認
@@ -106,7 +113,7 @@ public class ClientBasketController {
 		// カート一覧画面に遷移
 		return "redilect:/client/basket/list";
 	}
-
+	
 	/**
 	 * 買い物かごの商品を減らす
 	 * @author sakagami ryosuke
@@ -117,7 +124,7 @@ public class ClientBasketController {
 	public String deleteBasket(@PathVariable Integer id) {
 		// 買い物かごの取り出し
 		basket = (List<BasketBean>) session.getAttribute("basket");
-
+		
 		// 商品の照合
 		for (int i = 0; i < basket.size(); i++) {
 			// 買い物かご内アイテムの取り出し
@@ -126,22 +133,28 @@ public class ClientBasketController {
 			// 商品の照合
 			if (bB.getId() == id) {
 				// 注文数が2以上の場合数を減らす
-				if (bB.getOrderNum() >= 2) {
-					bB.setOrderNum(bB.getOrderNum() - 1);
-				} else {
+				if(bB.getOrderNum() >= 2) {
+				bB.setOrderNum(bB.getOrderNum() - 1);
+				}else {
 					// 買い物かごリストから商品を削除
 					basket.remove(i);
 				}
 				break;
 			}
 		}
-
-		// セッションに買い物かごデータを代入
-		session.setAttribute("basket", basket);
+		// 買い物かごの件数が0の時
+		if(basket.size()==0) {
+			// セッションから買い物かごを削除
+			session.removeAttribute("basket");
+		}else {
+			// セッションに買い物かごデータを代入
+			session.setAttribute("basket", basket);
+		}
+		
 		// カート一覧画面に遷移
 		return "redirect:/client/basket/list";
 	}
-
+	
 	/**
 	 * 買い物かごを空にする
 	 * @author sakagami ryosuke

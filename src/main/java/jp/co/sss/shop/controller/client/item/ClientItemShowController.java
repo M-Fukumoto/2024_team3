@@ -94,8 +94,7 @@ public class ClientItemShowController {
 
 		return "/client/item/list/{sortType}";
 	}
-	
-	/**
+		/**
 	 * 商品情報詳細表示処理
 	 *
 	 * @author ko teiketsu

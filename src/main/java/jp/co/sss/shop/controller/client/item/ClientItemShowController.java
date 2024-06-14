@@ -40,10 +40,10 @@ public class ClientItemShowController {
 	 */
 	@RequestMapping(path = "/" , method = { RequestMethod.GET, RequestMethod.POST })
 	public String index(Model model) {
+		model.addAttribute("items", itemRepository.findAllByOrderByCountAllDesc());
 		
 	return "index";
 	}
-	
 	
 	/**
 	 * 商品情報詳細表示処理

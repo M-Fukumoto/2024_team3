@@ -51,7 +51,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	 * @author sakagami ryosuke
 	 * @return 商品エンティティ
 	 */
-	@Query("SELECT i FROM Item i RIGHT OUTER JOIN OrderItem o ON i.id = o.item.id WHERE i.deleteFlag = 0 GROUP BY i order by COUNT(i.id) DESC")
+	@Query("SELECT i FROM Item i INNER JOIN OrderItem o ON i.id = o.item.id WHERE i.deleteFlag = 0 GROUP BY i order by COUNT(i.id) DESC")
 	List<Item> findAllByOrderByCountAllDesc();
 	
 	/**

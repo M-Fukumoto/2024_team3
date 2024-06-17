@@ -1,7 +1,9 @@
 package jp.co.sss.shop.controller.client.item;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -34,68 +36,96 @@ public class ClientItemShowController {
 	 */
 	@Autowired
 	BeanTools beanTools;
-	
+
+	/**
+	 * 並び順 
+	 */
+	private String sortType;
+
 	/**
 	 * トップ画面 表示処理
 	 *
 	 * @param model    Viewとの値受渡し
 	 * @return "index" トップ画面
 	 */
-	@RequestMapping(path = "/" , method = RequestMethod.GET)
+	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public String index(Model model, Pageable pageable) {
 
-			// 商品情報を全件検索(売れ筋順)
-			List<Item> itemsPage = itemRepository.findAllByOrderByCountAllDesc();
-			if (itemsPage == null) {
+		// 商品一覧表示の並び順を「売れ筋順」に初期化
+		sortType = "uriage";
+
+		// 商品情報を全件検索(売れ筋順)
+		List<Item> itemsPage = itemRepository.findAllByOrderByCountAllDesc();
+
+		if (itemsPage == null) {
 			// 商品情報を全件検索(新着順)
 			itemsPage = itemRepository.findAllByOrderByInsertDate();
-			}
-
-			// 商品情報をViewへ渡す
-			model.addAttribute("items", itemsPage);
-
-			
-			return "/index";
+			//新着商品あり：一覧表示の並び順を「新着順」にする
+			sortType = "sintyaku";
 		}
-	
-	
-//	・表示内容の取得については、表示順変更(新着順)、表示順変更
-//	(売れ筋順)、カテゴリ別検索の機能説明に記載
-//	・検索条件、表示順に合わせた一覧表示
-//	・検索条件、表示順の指定がない場合は、すべての商品を「新着
-//	順」で取得し表示
-	
-	
-	
-	/**
- * 商品一覧表示処理
- *
- * @author ko teiketsu
- * @param id  商品ID
- * @param model  Viewとの値受渡し
- * @return "client/item/detail" 詳細画面 表示
- */
-	
+		//取得したログイン商品一覧情報を画面表示用一覧オブジェクトにコピー
 
-	
-	
-		/**
-	 * 商品情報詳細表示処理
-	 *
-	 * @author ko teiketsu
-	 * @param id  商品ID
-	 * @param model  Viewとの値受渡し
-	 * @return "client/item/detail" 詳細画面 表示
-	 */
+		// 画面表示用のリストを作成
+		List<ItemBean> itemsBean = new ArrayList<ItemBean>();
+		
+		BeanUtils.copyProperties(itemsPage,itemsBean);
+		//一覧表示の並び順と画面表示用一覧オブジェクトをリクエストオブジェクトに設定
+		//model.addAttribute("sortType",sortType,"insertDate","deleteFlag");
+		// 商品情報をViewへ渡す
+		model.addAttribute("items", itemsBean);
+		
+		//トップ画面表示
+		return "/index";
+	}
+
+	//	・表示内容の取得については、表示順変更(新着順)、表示順変更
+	//	(売れ筋順)、カテゴリ別検索の機能説明に記載
+	//	・検索条件、表示順に合わせた一覧表示
+	//	・検索条件、表示順の指定がない場合は、すべての商品を「新着
+	//	順」で取得し表示
+
+	/**
+	* 商品一覧表示処理
+	*
+	* @author ko teiketsu
+	* @param id  商品ID
+	* @param model  Viewとの値受渡し
+	* @return "client/item/detail" 詳細画面 表示
+	*/
+	@RequestMapping(path = "/client/item/list/{sortType}", method = { RequestMethod.GET })
+	public String showItems(@PathVariable int id, Model model) {
+		List<Item> itemsPage = itemRepository.findAllByOrderByCountAllDesc();
+		if (itemsPage == null) {
+			// 商品情報を全件検索(新着順)
+			itemsPage = itemRepository.findAllByOrderByInsertDate();
+		}
+		// 商品情報をViewへ渡す	
+		return "";
+	}
+
+	@RequestMapping(path = "/client/item/list/{sortType}?categoryId={カテゴリID}", method = { RequestMethod.GET })
+	public String showItemss(@PathVariable int id, Model model) {
+		// 商品情報をViewへ渡す
+		return "";
+	}
+
+	/**
+	* 商品情報詳細表示処理
+	*
+	* @author ko teiketsu
+	* @param id  商品ID
+	* @param model  Viewとの値受渡し
+	* @return "client/item/detail" 詳細画面 表示
+	*/
 	@RequestMapping(path = "/client/item/detail/{id}", method = RequestMethod.GET)
 	public String showItem(@PathVariable int id, Model model) {
 
 		// 対象の商品情報を取得
 		Item item = itemRepository.findByIdAndDeleteFlag(id, Constant.NOT_DELETED);
 
-	if (item == null) {
+		if (item == null) {
 			// 対象が無い場合、エラー
-	return "redirect:/syserror";
+			return "redirect:/syserror";
 		}
 
 		//Itemエンティティの各フィールドの値をItemBeanにコピー
@@ -103,9 +133,8 @@ public class ClientItemShowController {
 
 		// 商品情報をViewへ渡す
 		model.addAttribute("item", itemBean);
-		
-		
-	return "client/item/detail";
-	
+
+		return "client/item/detail";
+
 	}
 }

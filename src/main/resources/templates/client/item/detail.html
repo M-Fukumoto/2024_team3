@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{common/layout_5block :: layout(~{::title},~{::body/content()})}">
+
+<head>
+	<title th:text="#{item}+#{title.detail}+' | '+ #{shop.title}"> </title>
+	<meta charset="UTF-8" />
+</head>
+
+<body class="client item_detail_client">
+	<h2 th:class="title" th:text="#{item}+#{title.detail}"></h2>
+
+	<div class="info_form_area" th:object="${item}">
+		<div class="item_detail_area">
+			<div class="item_image_area">
+				<span th:if="*{image != null}">
+					<img th:src="@{/images/{image}(image=*{image})}"></img>
+				</span>
+				<span th:if="*{image == null}">
+					<img th:src="@{/images/common/no_image.jpg}"></img>
+				</span>
+			</div>
+			<dl class="item_detail_list">
+				<dt>[[#{itemForm.name}]]</dt>
+				<dd th:text="*{name}"></dd>
+				<dt>[[#{itemForm.price}]]</dt>
+				<dd th:text="*{price}"></dd>
+				<dt>[[#{itemForm.stock}]]</dt>
+				<dd th:if="${item.stock} ge 6">在庫あり</dd>
+				<dd th:if="${item.stock} == 0">在庫なし</dd>
+				<dd th:if="${item.stock ge 1 && item.stock le 5}" th:text="*{stock}"></dd>
+				<dt>[[#{data.category}]]</dt>
+				<dd th:text="*{categoryName}"></dd>
+				<dt>[[#{itemForm.description}]]</dt>
+				<dd th:text="*{description}"></dd>
+			</dl>
+		</div>
+
+		<div class="detail_button_area">
+			<form th:if="${item.stock} ge 1" th:action="@{/client/basket/add}" method="post">
+				<input type="submit" value="買い物かごに入れる" class="intobasket_button" />
+			</form>
+			
+			<form th:action="@{/client/item/list/1}" method="post">
+				<input type="submit" value="戻る" class="back_button" />
+			</form>
+
+		</div>
+	</div>
+</body>
+
+</html>

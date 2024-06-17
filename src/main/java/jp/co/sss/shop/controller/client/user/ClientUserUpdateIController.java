@@ -47,7 +47,7 @@ public class ClientUserUpdateIController {
 	 * @param id 変更対象ID
 	 * @return "redirect:/client//user/update/input" 入力録画面　表示処理
 	 */
-	@RequestMapping(path = "/client//user/update/input/{id}", method = RequestMethod.POST)
+	@RequestMapping(path = "/client/user/update/input/{id}", method = RequestMethod.POST)
 	public String updateInputInit(@PathVariable Integer id) {
 
 		//セッションスコープより入力情報を取り出す
@@ -73,7 +73,7 @@ public class ClientUserUpdateIController {
 		}
 
 		//変更入力画面　表示処理
-		return "redirect:/client//user/update/input";
+		return "redirect:/client/user/update/input";
 
 	}
 
@@ -83,7 +83,7 @@ public class ClientUserUpdateIController {
 	 * @param model Viewとの値受渡し
 	 * @return "client//user/update_input" 変更入力画面 表示
 	 */
-	@RequestMapping(path = "/client//user/update/input", method = RequestMethod.GET)
+	@RequestMapping(path = "/client/user/update/input", method = RequestMethod.GET)
 	public String updateInput(Model model) {
 
 		//セッションから入力フォーム取得
@@ -103,7 +103,7 @@ public class ClientUserUpdateIController {
 		}
 
 		//変更入力画面　表示
-		return "client//user/update_input";
+		return "client/user/update_input";
 
 	}
 
@@ -116,7 +116,7 @@ public class ClientUserUpdateIController {
 	 *   入力値エラーあり："redirect:/admin/user/update/input" 変更入力画面へ 
 	 *   入力値エラーなし："redirect:/admin/user/update/check" 変更確認画面へ
 	 */
-	@RequestMapping(path = "/client//user/update/check", method = RequestMethod.POST)
+	@RequestMapping(path = "/client/user/update/check", method = RequestMethod.POST)
 	public String updateInputCheck(@Valid @ModelAttribute UserForm form, BindingResult result) {
 
 		//直前のセッション情報を取得
@@ -153,7 +153,7 @@ public class ClientUserUpdateIController {
 	 * @param model Viewとの値受渡し
 	 * @return "admin/user/update_check" 確認画面表示
 	 */
-	@RequestMapping(path = "/client//user/update/check", method = RequestMethod.GET)
+	@RequestMapping(path = "/client/user/update/check", method = RequestMethod.GET)
 	public String updateCheck(Model model) {
 		//セッションから入力フォーム情報取得
 		UserForm userForm = (UserForm) session.getAttribute("userForm");
@@ -165,7 +165,7 @@ public class ClientUserUpdateIController {
 		model.addAttribute("userForm", userForm);
 
 		// 変更確認画面　表示
-		return "client//user/update_check";
+		return "client/user/update_check";
 
 	}
 
@@ -175,7 +175,7 @@ public class ClientUserUpdateIController {
 	 *
 	 * @return "redirect:/admin/user/update/complete" 変更完了画面　表示へ
 	 */
-	@RequestMapping(path = "/client//user/update/complete", method = RequestMethod.POST)
+	@RequestMapping(path = "/client/user/update/complete", method = RequestMethod.POST)
 	public String updateComplete() {
 
 		//セッション保持情報から入力値再取得
@@ -216,7 +216,7 @@ public class ClientUserUpdateIController {
 		session.removeAttribute("userForm");
 
 		// 変更完了画面　表示処理
-		return "redirect:/client//user/update/complete";
+		return "redirect:/client/user/update/complete";
 	}
 
 	/**
@@ -224,10 +224,10 @@ public class ClientUserUpdateIController {
 	 * 
 	 * @return "admin/user/update_complete"
 	 */
-	@RequestMapping(path = "/client//user/update/complete", method = RequestMethod.GET)
+	@RequestMapping(path = "/client/user/update/complete", method = RequestMethod.GET)
 	public String updateCompleteFinish() {
 		
-		return "client//user/update_complete";
+		return "client/user/update_complete";
 	}
 
 }

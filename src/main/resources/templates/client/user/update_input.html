@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{common/layout_4block :: layout(~{::title},~{::body/content()})}">
+	th:replace="~{common/layout_5block :: layout(~{::title},~{::body/content()})}">
 
 <head>
 	<title th:text="#{user}+#{title.update.input}+' | '+ #{shop.title}"> </title>
@@ -44,29 +44,11 @@
 					<label><span class="input_title">[[#{userForm.phoneNumber}]]</span></label>
 					<input type="text" th:field="*{phoneNumber}" />
 				</li>
-
-				<li th:if="${session.user.authority == 0 or session.user.authority == 1}">
-					<label><span class="input_title">[[#{data.authority}]]</span></label>
-					<div class="radio_label" th:if="${session.user.authority == 0 and session.user.id!=userForm.id}">
-						<input type="radio" name="authority" value="0"
-							th:checked="*{authority == 0}" />[[#{auth.system.str}]]
-						<input type="radio" name="authority" value="1"
-							th:checked="*{authority == 1}" />[[#{auth.admin.str}]]
-						<input type="radio" name="authority" value="2"
-							th:checked="*{authority == 2}" />[[#{auth.client.str}]]
-					</div>
-					<th:block th:if="${session.user.authority == 1 or session.user.id==userForm.id}">
-						<th:block th:switch="*{authority}">
-							<span class="input_value" th:case="0">[[#{auth.system.str}]]</span>
-							<span class="input_value" th:case="1">[[#{auth.admin.str}]]</span>
-							<span class="input_value" th:case="2">[[#{auth.client.str}]]</span>
-					</th:block>
-				</li>
 			</ul>
 			<input type="hidden" th:field="*{id}" />
 			<input type="submit" value="確認" class="send_button" />
 		</form>
-		<form th:action="@{/client/user/detail/{id}(id=*{id})}" method="post">
+		<form th:action="@{/client/user/detail}" method="post">
 			<input type="submit" value="戻る" class="back_button" />
 		</form>
 	</div>

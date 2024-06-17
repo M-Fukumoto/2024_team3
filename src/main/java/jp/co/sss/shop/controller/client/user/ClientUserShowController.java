@@ -41,7 +41,7 @@ public class ClientUserShowController {
 	 * @param pageable ページング制御
 	 * @return "admin/user/list" 一覧画面　表示
 	 */
-	@RequestMapping(path = "/Client/user/list", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(path = "/client/user/list", method = { RequestMethod.GET, RequestMethod.POST })
 	public String showUserList(Model model, Pageable pageable) {
 
 		// 会員情報の登録数の取得と新規追加可否チェック

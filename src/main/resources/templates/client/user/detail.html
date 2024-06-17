@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{common/layout_4block :: layout(~{::title},~{::body/content()})}">
+	th:replace="~{common/layout_5block :: layout(~{::title},~{::body/content()})}">
 
 <head>
 	<title th:text="#{user}+#{title.detail}+' | '+ #{shop.title}"> </title>
@@ -36,15 +36,14 @@
 		</div>
 
 		<div class="detail_button_area">
-			<form th:action="@{/admin/user/list}" method="post">
+			<form th:action="@{/}" >
 				<input type="submit" value="戻る" class="back_button" />
 			</form>
-			<form th:action="@{/admin/user/update/input/{id}(id=*{id})}" method="post">
+			<form th:action="@{/client/user/update/input/{id}(id=*{id})}" method="post">
 				<input type="submit" value="変更" />
 			</form>
-			<form th:action="@{/admin/user/delete/check/{id}(id=*{id})}" method="post">
-				<input type="submit" value="退会" class="delete" disabled th:if="${userBean.id==session.user.id}" />
-				<input type="submit" value="退会" class="delete" th:unless="${userBean.id==session.user.id}" />
+			<form th:action="@{/client/user/delete/check/{id}(id=*{id})}" method="post">
+				<input type="submit" value="退会" class="delete"/>
 			</form>
 		</div>
 	</div>

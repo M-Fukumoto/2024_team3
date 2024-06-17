@@ -15,11 +15,10 @@ import jp.co.sss.shop.repository.UserRepository;
 import jp.co.sss.shop.util.Constant;
 
 /**
- * 会員管理 削除機能(運用管理者、システム管理者)のコントローラクラス
+ * 会員管理 削除機能(一般会員)のコントローラクラス
  *
  * @author SystemShared
  * 
- *  TIPS: 一般会員向けの会員削除機能に類似した処理です。
  *  
  */
 @Controller
@@ -43,7 +42,7 @@ public class ClientUserDeleteController {
 	 * @param id 削除対象ID
 	 * @return "redirect:/admin/user/delete/check" 削除確認画面 表示
 	 */
-	@RequestMapping(path = "/client//user/delete/check/{id}", method = RequestMethod.POST)
+	@RequestMapping(path = "/client/user/delete/check/{id}", method = RequestMethod.POST)
 	public String deleteCheck(@PathVariable Integer id) {
 
 		// 削除対象の会員情報を取得
@@ -62,7 +61,7 @@ public class ClientUserDeleteController {
 		session.setAttribute("userForm", userForm);
 
 		// 削除確認画面　表示
-		return "redirect:/client//user/delete/check";
+		return "redirect:/client/user/delete/check";
 	}
 
 	/**
@@ -71,7 +70,7 @@ public class ClientUserDeleteController {
 	 * @param model Viewとの値受渡し
 	 * @return "admin/user/delete_check" 確認画面 表示
 	 */
-	@RequestMapping(path = "/client//user/delete/check", method = RequestMethod.GET)
+	@RequestMapping(path = "/client/user/delete/check", method = RequestMethod.GET)
 	public String updateInput(Model model) {
 
 		//セッションから入力フォーム取得
@@ -84,7 +83,7 @@ public class ClientUserDeleteController {
 		model.addAttribute("userForm", userForm);
 
 		// 削除確認画面　表示
-		return "client//user/delete_check";
+		return "client/user/delete_check";
 	}
 
 	/**
@@ -92,7 +91,7 @@ public class ClientUserDeleteController {
 	 *
 	 * @return "redirect:/admin/user/delete/complete" 会員情報 削除完了画面へ
 	 */
-	@RequestMapping(path = "/client//user/delete/complete", method = RequestMethod.POST)
+	@RequestMapping(path = "/client/user/delete/complete", method = RequestMethod.POST)
 	public String deleteComplete() {
 
 		// セッションから削除対象フォーム情報を取得
@@ -119,7 +118,7 @@ public class ClientUserDeleteController {
 		session.removeAttribute("userForm");
 
 		// 削除完了画面　表示処理
-		return "redirect:/client//user/delete/complete";
+		return "redirect:/client/user/delete/complete";
 	}
 
 	/**
@@ -127,10 +126,10 @@ public class ClientUserDeleteController {
 	 *
 	 * @return "admin/user/delete_complete" 会員情報 削除完了画面へ
 	 */
-	@RequestMapping(path = "/client//user/delete/complete", method = RequestMethod.GET)
+	@RequestMapping(path = "/client/user/delete/complete", method = RequestMethod.GET)
 	public String deleteCompleteFinish() {
 
-		return "client//user/delete_complete";
+		return "client/user/delete_complete";
 	}
 
 }

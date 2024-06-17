@@ -46,7 +46,7 @@ public class ClientUserRegistController {
 	public String registInputInit() {
 
 		//セッションスコープより入力情報を取り出す
-		UserForm userForm = (UserForm) session.getAttribute("userForm");
+		UserForm userForm = new UserForm();
 		//空の入力フォーム情報をセッションに保持 登録ボタンからの遷移
 		session.setAttribute("userForm", userForm);
 
@@ -55,28 +55,6 @@ public class ClientUserRegistController {
 
 	}
 
-	/**
-	 * 入力画面　表示処理(POST) 一覧画面での新規ボタン押下後の処理
-	 * 
-	 * @return "redirect:/client/user/regist/input" 入力画面　表示処理
-	 */
-	@RequestMapping(path = "/client/user/regist/input", method = RequestMethod.POST)
-	public String registInput() {
-
-		//セッションスコープより入力情報を取り出す
-		UserForm userForm = (UserForm) session.getAttribute("userForm");
-		if (userForm == null) {
-			userForm = new UserForm();
-			userForm.setAuthority(((UserBean) session.getAttribute("user")).getAuthority());
-
-			//空の入力フォーム情報をセッションに保持 登録ボタンからの遷移
-			session.setAttribute("userForm", userForm);
-		}
-
-		//登録入力画面　表示処理
-		return "redirect:/client/user/regist/input";
-
-	}
 
 	/**
 	 * 入力画面　表示処理(GET)
@@ -88,6 +66,7 @@ public class ClientUserRegistController {
 	public String registInput(Model model) {
 
 		UserForm userForm = (UserForm) session.getAttribute("userForm");
+		session.setAttribute("userForm", userForm);
 		if (userForm == null) {
 			// セッション情報がない場合、エラー
 			return "redirect:/syserror";
@@ -118,7 +97,7 @@ public class ClientUserRegistController {
 	 * 	入力値エラーあり："redirect:/client/user/regist/input " 入力録画面　表示処理
 	 * 	入力値エラーなし："redirect:/client/user/regist/check " 登録確認画面　表示処理
 	 */
-	@RequestMapping(path = "/client/user/regist/check ", method = RequestMethod.POST)
+	@RequestMapping(path = "/client/user/regist/input/check", method = RequestMethod.POST)
 	public String registInputCheck(@Valid @ModelAttribute UserForm form, BindingResult result) {
 
 		//直前のセッション情報を取得
@@ -127,23 +106,19 @@ public class ClientUserRegistController {
 			// セッション情報が無い場合、エラー
 			return "redirect:/syserror";
 		}
-		if (form.getAuthority() == null) {
-			//権限情報がない場合、セッション情報から値をセット
-			form.setAuthority(lastUserForm.getAuthority());
-		}
 
-		// 入力フォーム情報をセッションに保持
+		// 入力フォーム情報をセッションにセット
 		session.setAttribute("userForm", form);
 
 		if (result.hasErrors()) {
 			// 入力値にエラーがあった場合、エラー情報をセッションに保持
 			session.setAttribute("result", result);
 			// 登録入力画面　表示処理
-			return "redirect:/client/user/regist/input ";
+			return "redirect:/client/user/regist/input";
 		}
 
 		// 登録確認画面　表示処理 
-		return "redirect:/client/user/regist/check ";
+		return "redirect:/client/user/regist/check";
 	}
 
 	/**
@@ -152,7 +127,7 @@ public class ClientUserRegistController {
 	 * @param model Viewとの値受渡し
 	 * @return "client/user/regist/check " 確認画面　表示
 	 */
-	@RequestMapping(path = "/client/user/regist/check ", method = RequestMethod.GET)
+	@RequestMapping(path = "/client/user/regist/check", method = RequestMethod.GET)
 	public String registCheck(Model model) {
 		//セッションから入力フォーム情報取得
 		UserForm userForm = (UserForm) session.getAttribute("userForm");
@@ -164,7 +139,7 @@ public class ClientUserRegistController {
 		model.addAttribute("userForm", userForm);
 
 		//登録確認画面　表示処理
-		return "client/user/regist_check ";
+		return "client/user/regist_check";
 
 	}
 
@@ -178,6 +153,7 @@ public class ClientUserRegistController {
 
 		//セッション保持情報から入力値再取得
 		UserForm userForm = (UserForm) session.getAttribute("userForm");
+		
 		if (userForm == null) {
 			// セッション情報がない場合、エラー
 			return "redirect:/syserror";
@@ -189,11 +165,20 @@ public class ClientUserRegistController {
 		// 入力フォーム情報をエンティティに設定
 		BeanUtils.copyProperties(userForm, user);
 
+		//
+		user.setAuthority(2);
+		
 		// DB登録
 		userRepository.save(user);
 
 		//セッションから入力情報削除
 		session.removeAttribute("userForm");
+		
+		UserBean userBean = new UserBean();
+		
+		BeanUtils.copyProperties(user, userBean);
+		
+		session.setAttribute("user", userBean);
 
 		//登録完了画面　表示処理
 		return "redirect:/client/user/regist/complete";

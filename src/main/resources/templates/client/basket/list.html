@@ -10,51 +10,53 @@
 <body class="user">
 	<h2 th:class="title" th:text="#{basket}"></h2>
 
-	<!--買い物かごが空-->
-	<div th:unless="${session.basket} != null">
-		<p th:text="#{msg.basket.list.none}"></p>
-	</div>
-	
-	<br>
-	
-	<!--エラー-->
-	<div th:each="basketItem:${session.basket}">
-		<ul class="error_list_no_mark" th:if="${basketItem.stock} < ${basketItem.orderNum}">
-			<li th:if="${basketItem.stock} == 0" th:text="#{msg.basket.stock.none(${basketItem.name})}"></li>
-			<li th:unless="${basketItem.stock} == 0" th:text="#{msg.basket.stock.short(${basketItem.name})}"></li>
-		</ul>
+	<div class="container">
+		<!--買い物かごが空-->
+		<div th:unless="${session.basket} != null">
+			<p th:text="#{msg.basket.list.none}"></p>
+		</div>
 
-	</div>
+		<br>
 
-	<table class="list_table basket" th:if="${session.basket} != null">
-		<tr>
-			<td th:text="#{data.basket.item.name}"></td>
-			<td th:text="#{data.basket.count}"></td>
-			<td th:text="#{data.basket.operate}"></td>
-			<td th:text="#{data.basket.stock.status}"></td>
-		</tr>
-		<tr th:each="basketItem:${session.basket}">
-			<td><a th:href="@{/client/item/detail/{id}(id=${basketItem.id})}" th:text="${basketItem.name}"></a></td>
-			<td th:text="${basketItem.orderNum}"></td>
-			<td>
-				<form th:action="@{/client/basket/delete/{id}(id=${basketItem.id})}" method="post"><input type="submit"
-						value="削除">
-				</form>
-			</td>
-			<td>
-				<span th:if="${basketItem.stock} < 6" th:text="${basketItem.stock}"></span>
-				<span th:if="${basketItem.stock} > 5" th:text="#{data.in.stock}"></span>
-			</td>
-		</tr>
-	</table>
-	<div class="user_info_form_area shopping_button">
-		<form th:action="@{/client/order/address/input}" method="post">
-			<input type="submit" value="ご注文のお手続き">
-		</form>
+		<!--エラー-->
+		<div th:each="basketItem:${session.basket}">
+			<ul class="error_list_no_mark" th:if="${basketItem.stock} < ${basketItem.orderNum}">
+				<li th:if="${basketItem.stock} == 0" th:text="#{msg.basket.stock.none(${basketItem.name})}"></li>
+				<li th:unless="${basketItem.stock} == 0" th:text="#{msg.basket.stock.short(${basketItem.name})}"></li>
+			</ul>
 
-		<form th:action="@{/basket/deleteAll}" method="post">
-			<input type="submit" value="買い物かごを空にする" class="delete">
-		</form>
+		</div>
+
+		<table class="list_table basket" th:if="${session.basket} != null">
+			<tr>
+				<td th:text="#{data.basket.item.name}"></td>
+				<td th:text="#{data.basket.count}"></td>
+				<td th:text="#{data.basket.operate}"></td>
+				<td th:text="#{data.basket.stock.status}"></td>
+			</tr>
+			<tr th:each="basketItem:${session.basket}">
+				<td><a th:href="@{/client/item/detail/{id}(id=${basketItem.id})}" th:text="${basketItem.name}"></a></td>
+				<td th:text="${basketItem.orderNum}"></td>
+				<td>
+					<form th:action="@{/client/basket/delete/{id}(id=${basketItem.id})}" method="post"><input
+							type="submit" value="削除">
+					</form>
+				</td>
+				<td>
+					<span th:if="${basketItem.stock} < 6" th:text="${basketItem.stock}"></span>
+					<span th:if="${basketItem.stock} > 5" th:text="#{data.in.stock}"></span>
+				</td>
+			</tr>
+		</table>
+		<div class="user_info_form_area shopping_button">
+			<form th:action="@{/client/order/address/input}" method="post">
+				<input type="submit" value="ご注文のお手続き">
+			</form>
+
+			<form th:action="@{/basket/deleteAll}" method="post">
+				<input type="submit" value="買い物かごを空にする" class="delete">
+			</form>
+		</div>
 	</div>
 </body>
 

@@ -1,9 +1,7 @@
 package jp.co.sss.shop.controller.client.item;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -63,15 +61,11 @@ public class ClientItemShowController {
 			//新着商品あり：一覧表示の並び順を「新着順」にする
 			sortType = "sintyaku";
 		}
-		//取得したログイン商品一覧情報を画面表示用一覧オブジェクトにコピー
-
-		// 画面表示用のリストを作成
-		List<ItemBean> itemsBean = new ArrayList<ItemBean>();
+		// 取得したログイン商品一覧情報を画面表示用一覧オブジェクトにコピー
+		List<ItemBean> itemsBean = beanTools.copyEntityListToItemBeanList(itemsPage);
 		
-		BeanUtils.copyProperties(itemsPage,itemsBean);
 		//一覧表示の並び順と画面表示用一覧オブジェクトをリクエストオブジェクトに設定
-		//model.addAttribute("sortType",sortType,"insertDate","deleteFlag");
-		// 商品情報をViewへ渡す
+		model.addAttribute("sortType",sortType);
 		model.addAttribute("items", itemsBean);
 		
 		//トップ画面表示

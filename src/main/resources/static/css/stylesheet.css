@@ -715,4 +715,40 @@ p.link_center {
 	display: block;
 }
 
+/* ---レビュー入力欄 --- */
+.item_detail_review_area{
+	display: flex;
+	justify-content: space-between;
+}
 
+.item_detail_review_form_alia{
+	width: 40%;
+}
+
+.item_detail_review_list_alia{
+	width: 55%;
+}
+
+/* ---- レビュー一覧 ---- */
+.review_title{
+	display: flex;
+}
+
+.review_title .item{
+	width: 30%;
+	height: 100px;
+}
+
+.item_name{
+	width: 70%;
+	text-align: center;
+	margin: auto;
+}
+
+.item_name a{
+	font-size: 1.5rem;
+}
+
+.review_star {
+	color: rgb(255, 128, 64);
+}

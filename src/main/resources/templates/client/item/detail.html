@@ -40,11 +40,68 @@
 			<form th:if="${item.stock} ge 1" th:action="@{/client/basket/add}" method="post">
 				<input type="submit" value="買い物かごに入れる" class="intobasket_button" />
 			</form>
-			
+
 			<form th:action="@{/client/item/list/1}" method="post">
 				<input type="submit" value="戻る" class="back_button" />
 			</form>
+		</div>
+	</div>
+	<!--/* レビュー欄 */-->
+	<div class="info_form_area item_detail_review_area">
 
+		<div class="item_detail_review_form_alia">
+			<!--/* 入力フォーム */-->
+			<!--			<form th:action="@{/client/review/add/{id}(id=item.id)}" method="post" th:object="${review}">-->
+			<!--				<ul class="input_list">-->
+			<!--					<li><span class="input_title">投稿者名</span><input type="text" th:field="*{name}" /></li>-->
+			<!--					<li><span class="input_title">評価</span>-->
+			<!--						<select th:field="*{evaluation}">-->
+			<!--							<option value="1">★</option>-->
+			<!--							<option value="2">★★</option>-->
+			<!--							<option value="3">★★★</option>-->
+			<!--							<option value="4">★★★★</option>-->
+			<!--							<option value="5">★★★★★</option>-->
+			<!--						</select>-->
+			<!--					</li>-->
+			<!--					<li>-->
+			<!--						<p class="input_title">コメント</p><textarea th:field="*{commentReview}"></textarea>-->
+			<!--					</li>-->
+			<!--					<li><input type="submit" value="投稿" /></li>-->
+			<!--				</ul>-->
+			<!--			</form>-->
+
+			<form th:action="@{/client/review/add/{id}(id=item.id)}" method="post">
+				<ul class="input_list">
+					<li><span class="input_title">投稿者名</span><input type="text" name="name" /></li>
+					<li><span class="input_title">評価</span>
+						<select name="evaluation">
+							<option value="1">★</option>
+							<option value="2">★★</option>
+							<option value="3">★★★</option>
+							<option value="4">★★★★</option>
+							<option value="5">★★★★★</option>
+						</select>
+					</li>
+					<li>
+						<p class="input_title">コメント</p><textarea name="commentReview"></textarea>
+					</li>
+					<li><input type="submit" value="投稿" /></li>
+				</ul>
+			</form>
+		</div>
+
+		<!--/* 一覧表示 */-->
+		<div class="item_detail_review_list_alia">
+			<!--/* 一覧表示 CSS確認用 */-->
+			<ul class="input_list">
+				<li>坂上</li>
+				<li class="review_star">★☆☆☆☆</li>
+				<li>2024/11/14</li>
+				<li>おもろい</li>
+			</ul>
+			
+			
+			
 		</div>
 	</div>
 </body>

@@ -36,7 +36,7 @@ public class ClientBasketController {
 	public String basketTest(Model model) {
 		basket = new ArrayList<BasketBean>();
 		// 買い物かごにアイテムを追加
-		BasketBean bB = new BasketBean(1,"りんご",50);
+		BasketBean bB = new BasketBean(1,"りんご",0);
 		bB.setOrderNum(5);
 		basket.add(bB);
 		session.setAttribute("basket", basket);

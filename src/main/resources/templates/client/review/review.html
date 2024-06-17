@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{common/layout_5block :: layout(~{::title},~{::body/content()})}">
+
+<head>
+	<title>レビュ一覧</title>
+	<meta charset="UTF-8" />
+</head>
+
+<body class="user review">
+	<h2 class="title">レビュー一覧</h2>
+
+	<!--/* タイトル */-->
+	<div th:object="${item}" class="review_title">
+		<!--/* 商品画像 */-->
+		<div class="item">
+			<span th:if="*{image != null}">
+				<img th:src="@{/images/{image}(image=*{image})}"></img>
+			</span>
+			<span th:if="*{image == null}">
+				<img th:src="@{/images/common/no_image.jpg}"></img>
+			</span>
+		</div>
+		<!--/* 商品名 */-->
+		<div class="item_name">
+			<a th:href="@{/client/item/detail/{id}(id=${item.id})}" th:text="*{name}"></a>
+		</div>
+	</div>
+
+	<!--/* 登録なしメッセージ */-->
+	<div th:if="${#lists.isEmpty(reviews)}">
+		<p>レビューが投稿されていません。</p>
+	</div>
+
+	<!--/* 一覧表示 */-->
+	<ul th:each="review: ${reviews}" th:if="!${#reviews.isEmpty(review)}">
+		<li th:text"${review.name}"></li>
+		<li class="review_star" th:switch="${review.evaluation}">
+			<span th:case="1">★☆☆☆☆</span>
+			<span th:case="2">★★☆☆☆</span>
+			<span th:case="3">★★★☆☆</span>
+			<span th:case="4">★★★★☆</span>
+			<span th:case="5">★★★★★</span>
+		</li>
+		<li th:text"${review.insertDate}"></li>
+		<li th:text"${review.commentReview}"></li>
+	</ul>
+	
+		<!--/* 一覧表示 CSS確認用 */-->
+<!--	<ul  class="input_list review_list">-->
+<!--		<li>坂上</li>-->
+<!--		<li class="review_star">★☆☆☆☆</li>-->
+<!--		<li>2024/11/14</li>-->
+<!--		<li>おもろい</li>-->
+<!--	</ul>-->
+
+</body>
+
+</html>

@@ -37,7 +37,7 @@ public class Review {
 	 * コメント
 	 */
 	@Column
-	private String comment_review;
+	private String commentReview;
 	public Integer getId() {
 	/**
 	 * レビューIDの取得
@@ -81,17 +81,16 @@ public class Review {
 		this.evaluation = evaluation;
 	}
 	/**
-	 * コメントの取得
-	 * @return コメント
+	 * @return commentReview
 	 */
-	public String getComment_review() {
-		return comment_review;
+	public String getCommentReview() {
+		return commentReview;
 	}
 	/**
-	 * コメントのセット
-	 * @param comment_review コメント
+	 * @param commentReview セットする commentReview
 	 */
-	public void setComment_review(String comment_review) {
-		this.comment_review = comment_review;
+	public void setCommentReview(String commentReview) {
+		this.commentReview = commentReview;
 	}
+	
 }

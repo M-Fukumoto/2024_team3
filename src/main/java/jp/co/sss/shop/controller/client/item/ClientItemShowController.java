@@ -3,7 +3,6 @@ package jp.co.sss.shop.controller.client.item;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,35 +58,27 @@ public class ClientItemShowController {
 			return "/index";
 		}
 	
+	
+//	・表示内容の取得については、表示順変更(新着順)、表示順変更
+//	(売れ筋順)、カテゴリ別検索の機能説明に記載
+//	・検索条件、表示順に合わせた一覧表示
+//	・検索条件、表示順の指定がない場合は、すべての商品を「新着
+//	順」で取得し表示
+	
+	
+	
 	/**
-	 * 一覧データ取得、一覧表示　処理
-	 *
-	 * @param model Viewとの値受渡し
-	 * @param pageable ページ制御用
-	 * @return "admin/category/list" 一覧画面 表示
-	 */
-	@RequestMapping(path = "/client/item/list/{sortType}", method = { RequestMethod.GET})
-	public String showItemList(Model model, Pageable pageable) {
+ * 商品一覧表示処理
+ *
+ * @author ko teiketsu
+ * @param id  商品ID
+ * @param model  Viewとの値受渡し
+ * @return "client/item/detail" 詳細画面 表示
+ */
+	
 
-		// 商品情報の登録数の取得と新規追加可否チェック
-		Long itemsCount = itemRepository.count();
-		Boolean registrable = true;
-		if (itemsCount == Constant.ITEMS_MAX_COUNT) {
-			//商品情報の登録数が最大値の場合、新規追加不可
-			registrable = false;
-		}
-		Page<Item> itemsPage = itemRepository.findByDeleteFlagOrderByInsertDateDescPage(Constant.NOT_DELETED, pageable);
-
-		// エンティティ内の検索結果をJavaBeansにコピー
-		List<Item> itemList = itemsPage.getContent();
-
-		// 商品情報をViewへ渡す
-		model.addAttribute("registrable", registrable);
-		model.addAttribute("pages", itemsPage);
-		model.addAttribute("items", itemList);
-
-		return "/client/item/list/{sortType}";
-	}
+	
+	
 		/**
 	 * 商品情報詳細表示処理
 	 *

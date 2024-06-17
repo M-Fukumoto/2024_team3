@@ -42,10 +42,22 @@ public class ClientItemShowController {
 	 * @param model    Viewとの値受渡し
 	 * @return "index" トップ画面
 	 */
-	@RequestMapping(path = "/" , method = { RequestMethod.GET, RequestMethod.POST })
-	public String index(Model model) {
-	return "index";
-	}
+	@RequestMapping(path = "/" , method = RequestMethod.GET)
+	public String index(Model model, Pageable pageable) {
+
+			// 商品情報を全件検索(売れ筋順)
+			List<Item> itemsPage = itemRepository.findAllByOrderByCountAllDesc();
+			if (itemsPage == null) {
+			// 商品情報を全件検索(新着順)
+			itemsPage = itemRepository.findAllByOrderByInsertDate();
+			}
+
+			// 商品情報をViewへ渡す
+			model.addAttribute("items", itemsPage);
+
+			
+			return "/index";
+		}
 	
 	/**
 	 * 一覧データ取得、一覧表示　処理
@@ -54,7 +66,7 @@ public class ClientItemShowController {
 	 * @param pageable ページ制御用
 	 * @return "admin/category/list" 一覧画面 表示
 	 */
-	@RequestMapping(path = "/client/item/list/{sortType}", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(path = "/client/item/list/{sortType}", method = { RequestMethod.GET})
 	public String showItemList(Model model, Pageable pageable) {
 
 		// 商品情報の登録数の取得と新規追加可否チェック
@@ -64,23 +76,7 @@ public class ClientItemShowController {
 			//商品情報の登録数が最大値の場合、新規追加不可
 			registrable = false;
 		}
-
-//		・ナビゲーションバー「新着一覧」クリック時
-//		・サイドバー「カテゴリ別検索」クリック時 
-//		・「新着順」「売れ筋順」クリック時
-//		・「商品詳細画面」で「戻る」ボタンクリック時
-//		<処理内容>
-//		・表示内容の取得については、表示順変更(新着順)、表示順変更
-//		(売れ筋順)、カテゴリ別検索の機能説明に記載
-//		・検索条件、表示順に合わせた一覧表示
-//		・検索条件、表示順の指定がない場合は、すべての商品を「新着
-//		順」で取得し表示
-
-		
-		// 商品情報を全件検索(新着順)
 		Page<Item> itemsPage = itemRepository.findByDeleteFlagOrderByInsertDateDescPage(Constant.NOT_DELETED, pageable);
-		// 商品情報を全件検索(売れ筋順)
-		Page<Item> itemsPage1 = itemRepository.findByDeleteFlagOrderByInsertDateDescPage(Constant.NOT_DELETED, pageable);
 
 		// エンティティ内の検索結果をJavaBeansにコピー
 		List<Item> itemList = itemsPage.getContent();
@@ -89,8 +85,6 @@ public class ClientItemShowController {
 		model.addAttribute("registrable", registrable);
 		model.addAttribute("pages", itemsPage);
 		model.addAttribute("items", itemList);
-
-		
 
 		return "/client/item/list/{sortType}";
 	}

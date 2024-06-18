@@ -1,5 +1,8 @@
 package jp.co.sss.shop.form;
 
+import java.sql.Date;
+
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 /**
@@ -27,29 +30,35 @@ public class ReviewForm {
 	@Size(min = 0, max = 400, message = "{text.maxsize.message}")
 	private String commentReview;
 	/**
-	 * 投稿者名の取得
-	 * @return 投稿者名
+	 * 投稿日付
+	 */
+	@Column(insertable = false)
+	private Date insertDate;
+	/**
+	 * 削除フラグ
+	 */
+	@Column(insertable = false)
+	private Integer deleteFlag;
+	/**
+	 * @return name
 	 */
 	public String getName() {
 		return name;
 	}
 	/**
-	 * 投稿者名のセット
-	 * @param name 投稿者名
+	 * @param name セットする name
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 	/**
-	 * 評価の取得
-	 * @return 評価
+	 * @return evaluation
 	 */
 	public Integer getEvaluation() {
 		return evaluation;
 	}
 	/**
-	 * 評価のセット
-	 * @param evaluation 評価
+	 * @param evaluation セットする evaluation
 	 */
 	public void setEvaluation(Integer evaluation) {
 		this.evaluation = evaluation;
@@ -66,9 +75,29 @@ public class ReviewForm {
 	public void setCommentReview(String commentReview) {
 		this.commentReview = commentReview;
 	}
-	
-	
-	
-	
+	/**
+	 * @return insertDate
+	 */
+	public Date getInsertDate() {
+		return insertDate;
+	}
+	/**
+	 * @param insertDate セットする insertDate
+	 */
+	public void setInsertDate(Date insertDate) {
+		this.insertDate = insertDate;
+	}
+	/**
+	 * @return deleteFlag
+	 */
+	public Integer getDeleteFlag() {
+		return deleteFlag;
+	}
+	/**
+	 * @param deleteFlag セットする deleteFlag
+	 */
+	public void setDeleteFlag(Integer deleteFlag) {
+		this.deleteFlag = deleteFlag;
+	}
 }
 	

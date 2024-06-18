@@ -1,10 +1,14 @@
 package jp.co.sss.shop.entity;
 
+import java.sql.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -38,44 +42,61 @@ public class Review {
 	 */
 	@Column
 	private String commentReview;
-	public Integer getId() {
+	
 	/**
-	 * レビューIDの取得
-	 * @return レビューID
+	 * アイテムID
 	 */
+	@ManyToOne
+	@JoinColumn(name = "item_id", referencedColumnName = "id")
+	private Item item;
+	/**
+	 * ユーザーID
+	 */
+	@ManyToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private User user;
+	/**
+	 * 投稿日付
+	 */
+	@Column(insertable = false)
+	private Date insertDate;
+	/**
+	 * 削除フラグ
+	 */
+	@Column(insertable = false)
+	private Integer deleteFlag;
+	/**
+	 * @return id
+	 */
+	public Integer getId() {
 		return id;
 	}
 	/**
-	 * レビューIDのセット
-	 * @param id レビューID
+	 * @param id セットする id
 	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
 	/**
-	 * 投稿者名の取得
-	 * @return 投稿者名
+	 * @return name
 	 */
 	public String getName() {
 		return name;
 	}
 	/**
-	 * 投稿者名のセット
-	 * @param name 投稿者名
+	 * @param name セットする name
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 	/**
-	 * 評価の取得
-	 * @return 評価
+	 * @return evaluation
 	 */
 	public Integer getEvaluation() {
 		return evaluation;
 	}
 	/**
-	 * 評価のセット
-	 * @param evaluation 評価
+	 * @param evaluation セットする evaluation
 	 */
 	public void setEvaluation(Integer evaluation) {
 		this.evaluation = evaluation;
@@ -91,6 +112,54 @@ public class Review {
 	 */
 	public void setCommentReview(String commentReview) {
 		this.commentReview = commentReview;
+	}
+	/**
+	 * @return insertDate
+	 */
+	public Date getInsertDate() {
+		return insertDate;
+	}
+	/**
+	 * @param insertDate セットする insertDate
+	 */
+	public void setInsertDate(Date insertDate) {
+		this.insertDate = insertDate;
+	}
+	/**
+	 * @return deleteFlag
+	 */
+	public Integer getDeleteFlag() {
+		return deleteFlag;
+	}
+	/**
+	 * @param deleteFlag セットする deleteFlag
+	 */
+	public void setDeleteFlag(Integer deleteFlag) {
+		this.deleteFlag = deleteFlag;
+	}
+	/**
+	 * @return item
+	 */
+	public Item getItem() {
+		return item;
+	}
+	/**
+	 * @param item セットする item
+	 */
+	public void setItem(Item item) {
+		this.item = item;
+	}
+	/**
+	 * @return user
+	 */
+	public User getUser() {
+		return user;
+	}
+	/**
+	 * @param user セットする user
+	 */
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 }

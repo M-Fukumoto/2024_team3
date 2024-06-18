@@ -1,5 +1,7 @@
 package jp.co.sss.shop.bean;
 
+import java.sql.Date;
+
 /**
  * レビュー機能クラス
  *
@@ -18,30 +20,31 @@ public class ReviewBean {
 	 * コメント
 	 */
 	private String commentReview;
+	
 	/**
-	 * 投稿者名の取得
-	 * @return 投稿者名
+	 * 投稿日付
+	 */
+	private Date insertDate;
+	/**
+	 * @return name
 	 */
 	public String getName() {
 		return name;
 	}
 	/**
-	 * 投稿者名のセット
-	 * @param name 投稿者名
+	 * @param name セットする name
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 	/**
-	 * 評価の取得
-	 * @return 評価
+	 * @return evaluation
 	 */
 	public Integer getEvaluation() {
 		return evaluation;
 	}
 	/**
-	 * 評価のセット
-	 * @param evaluation 評価
+	 * @param evaluation セットする evaluation
 	 */
 	public void setEvaluation(Integer evaluation) {
 		this.evaluation = evaluation;
@@ -58,5 +61,16 @@ public class ReviewBean {
 	public void setCommentReview(String commentReview) {
 		this.commentReview = commentReview;
 	}
-
+	/**
+	 * @return insertDate
+	 */
+	public Date getInsertDate() {
+		return insertDate;
+	}
+	/**
+	 * @param insertDate セットする insertDate
+	 */
+	public void setInsertDate(Date insertDate) {
+		this.insertDate = insertDate;
+	}
 }

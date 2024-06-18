@@ -101,7 +101,7 @@ public class ClientItemShowController {
 		
 		//一覧表示の並び順と画面表示用一覧オブジェクトをリクエストオブジェクトに設定
 		model.addAttribute("sortType", sortType);
-		model.addAttribute("items", itemsList);
+		model.addAttribute("items", itemsBean);
 		
 		// 商品情報をViewへ渡す	
 		return "/client/item/list";

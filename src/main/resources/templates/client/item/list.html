@@ -19,7 +19,7 @@
 		<span th:text="#{sort.hotsell.str}"></span>
 	</div>
 	<!--/* 一覧表示 */-->
-	<table class="list_table item_list" th:if="!${#lists.isEmpty(items)}">
+	<table class="list_table item_detail" th:if="!${#lists.isEmpty(items)}">
 		<tr>
 			<th>[[#{data.item.image}]]</th>
 			<th>[[#{itemForm.name}]]</th>

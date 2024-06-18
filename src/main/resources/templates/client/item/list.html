@@ -10,6 +10,7 @@
 <body class="client item_list_client">
 
 	<h2 th:class="title" th:text="#{item}+#{title.list}"></h2>
+	
 	<div class="sorted_by" th:if="${sortType} == 1" >
 		<span th:text="#{sort.latest.str}"> </span>
 		<a th:href="@{/client/item/list/2?categoryId=}+${categoryId}" th:text="#{sort.hotsell.str}"></a>

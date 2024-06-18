@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import jp.co.sss.shop.entity.Category;
 import jp.co.sss.shop.entity.Item;
 import jp.co.sss.shop.util.JPQLConstant;
 
@@ -55,9 +56,25 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	List<Item> findAllByOrderByCountAllDesc();
 	
 	/**
+	 * カテゴリを条件に商品を売れ筋順に表示
+	 * @author sakagami ryosuke
+	 * @return 商品エンティティ
+	 */
+	@Query("SELECT i FROM Item i INNER JOIN OrderItem o ON i.id = o.item.id WHERE i.deleteFlag = 0 AND i.category = :category GROUP BY i order by COUNT(i.id) DESC")
+	List<Item> findByCategoryByOrderByCountAllDesc(@Param("category") Category category);
+	
+	/**
 	 * 商品を新着順に表示
 	 * @author sakagami ryosuke
 	 * @return 商品エンティティ
 	 */
 	List<Item> findAllByOrderByInsertDate();
+	
+	/**
+	 * カテゴリを条件に商品を新着順で表示
+	 * @author sakagami ryosuke
+	 * @param category
+	 * @return
+	 */
+	List<Item> findByCategoryOrderByInsertDate(Category category);
 }

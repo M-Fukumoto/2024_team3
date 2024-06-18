@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import jp.co.sss.shop.bean.ItemBean;
+import jp.co.sss.shop.entity.Category;
 import jp.co.sss.shop.entity.Item;
 import jp.co.sss.shop.repository.ItemRepository;
 import jp.co.sss.shop.service.BeanTools;
@@ -82,35 +83,44 @@ public class ClientItemShowController {
 	* @return "client/item/detail" 詳細画面 表示
 	*/
 	@RequestMapping(path = "/client/item/list/{sortType}", method = { RequestMethod.GET })
-	public String showItems(@PathVariable int sortType, Model model) {
+	public String showItems(@PathVariable int sortType, int categoryId, Model model) {
 
 		// 商品格納用のリストを作成
 		List<Item> itemsList = new ArrayList<Item>();
 
-		// 並び順を元に商品一覧を取得
-		if (sortType == 1) {
-			// 商品情報を全件検索(新着順)
-			itemsList = itemRepository.findAllByOrderByInsertDate();
-		} else if(sortType == 2){
-			// 商品情報を全件検索(売れ筋順)
-			itemsList = itemRepository.findAllByOrderByCountAllDesc();
+		// カテゴリ指定があるかを確認
+		if (categoryId != 0) {
+			// 検索用カテゴリエンティティを作成
+			Category category = new Category();
+			category.setId(categoryId);
+
+			// 並び順、カテゴリを条件に商品一覧表示を取得
+			if (sortType == 1) {
+				itemsList = itemRepository.findByCategoryOrderByInsertDate(category);
+			} else if (sortType == 2) {
+				itemsList = itemRepository.findByCategoryByOrderByCountAllDesc(category);
+			}
+		} else {
+			// 並び順を元に商品一覧を取得
+			if (sortType == 1) {
+				// 商品情報を全件検索(新着順)
+				itemsList = itemRepository.findAllByOrderByInsertDate();
+			} else if (sortType == 2) {
+				// 商品情報を全件検索(売れ筋順)
+				itemsList = itemRepository.findAllByOrderByCountAllDesc();
+			}
 		}
-		
+
 		// 取得したログイン商品一覧情報を画面表示用一覧オブジェクトにコピー
 		List<ItemBean> itemsBean = beanTools.copyEntityListToItemBeanList(itemsList);
-		
+
 		//一覧表示の並び順と画面表示用一覧オブジェクトをリクエストオブジェクトに設定
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("items", itemsBean);
-		
+		model.addAttribute("categoryId", categoryId);
+
 		// 商品情報をViewへ渡す	
 		return "/client/item/list";
-	}
-
-	@RequestMapping(path = "/client/item/list/{sortType}?categoryId={カテゴリID}", method = { RequestMethod.GET })
-	public String showItemss(@PathVariable int id, Model model) {
-		// 商品情報をViewへ渡す
-		return "";
 	}
 
 	/**

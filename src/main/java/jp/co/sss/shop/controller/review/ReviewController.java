@@ -3,7 +3,6 @@ package jp.co.sss.shop.controller.review;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import jp.co.sss.shop.bean.ItemBean;
-import jp.co.sss.shop.bean.ReviewBean;
 import jp.co.sss.shop.entity.Item;
 import jp.co.sss.shop.entity.Review;
 import jp.co.sss.shop.repository.ItemRepository;
@@ -33,20 +31,24 @@ public class ReviewController {
 	
 	@RequestMapping("/client/item/review/test")
 	public String reviewTest(Model model) {
-		Item item = itemRepository.findByIdAndDeleteFlag(1, Constant.NOT_DELETED);
+		Item item = itemRepository.findByIdAndDeleteFlag(2, Constant.NOT_DELETED);
 
 		if (item == null) {
 			// 対象が無い場合、エラー
 			return "redirect:/syserror";
 		}
-
 		//Itemエンティティの各フィールドの値をItemBeanにコピー
 		ItemBean itemBean = beanTools.copyEntityToItemBean(item);
-
+		// レビュー格納用のリストを作成
+		List<Review> reviewList = new ArrayList<Review>();
+		// レビューを全件検索(新着順)
+		reviewList = reviewRepository.findByItemOrderByInsertDateDesc(item);
+		// レビューをViewへ渡す
+		model.addAttribute("reviews", reviewList);
 		// 商品情報をViewへ渡す
 		model.addAttribute("item", itemBean);
-
-		return "/client/review/list";
+		//商品詳細画面に遷移
+		return "client/review/list";
 	}
 
 	/**
@@ -57,22 +59,23 @@ public class ReviewController {
 	*/
 	@RequestMapping(path = "/client/item/review/{id}", method = { RequestMethod.GET })
 	public String reviewAll(@PathVariable Integer id,Model model) {
-	// 外部参照先テーブルに対応付けられたエンティティItemのオブジェクトを生成
-	Item item = new Item();
-	//Itemのオブジェクト内のidフィールドにパラメータの値を代入
-	item.setId(id);
-	//itemのオブジェクト内のidフィールドを使用した条件検索を実行
-	//List<Review> review = reviewRepository.findItemByOrderByInsertDateDesc(item);
-	// レビュー格納用のリストを作成
-	List<Review> reviewList = new ArrayList<Review>();
-	// レビューを全件検索(新着順)
-	reviewList = reviewRepository.findByItemOrderByInsertDateDesc(item);
-	//Itemエンティティの各フィールドの値をItemBeanにコピー
-	List<ReviewBean> reivewBean = new ArrayList<ReviewBean>();
-	BeanUtils.copyProperties(reviewList, reivewBean);
-	// レビューをViewへ渡す
-	model.addAttribute("review", reviewList);
-	//商品詳細画面に遷移
-	return "/client/review/list";
+		Item item = itemRepository.findByIdAndDeleteFlag(id, Constant.NOT_DELETED);
+
+		if (item == null) {
+			// 対象が無い場合、エラー
+			return "redirect:/syserror";
+		}
+		//Itemエンティティの各フィールドの値をItemBeanにコピー
+		ItemBean itemBean = beanTools.copyEntityToItemBean(item);
+		// レビュー格納用のリストを作成
+		List<Review> reviewList = new ArrayList<Review>();
+		// レビューを全件検索(新着順)
+		reviewList = reviewRepository.findByItemOrderByInsertDateDesc(item);
+		// レビューをViewへ渡す
+		model.addAttribute("reviews", reviewList);
+		// 商品情報をViewへ渡す
+		model.addAttribute("item", itemBean);
+		//商品詳細画面に遷移
+		return "client/review/list";
 	}
 }

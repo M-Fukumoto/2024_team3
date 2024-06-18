@@ -40,6 +40,7 @@ public class ClientItemShowController {
 	/**
 	 * 並び順 
 	 */
+	int sortType;
 
 	/**
 	 * トップ画面 表示処理
@@ -52,7 +53,7 @@ public class ClientItemShowController {
 	public String index(Model model, Pageable pageable) {
 
 		// 商品一覧表示の並び順を「売れ筋順」に初期化
-		int sortType = 2;
+		sortType = 2;
 
 		// 商品情報を全件検索(売れ筋順)
 		List<Item> itemsList = itemRepository.findAllByOrderByCountAllDesc();
@@ -66,8 +67,7 @@ public class ClientItemShowController {
 		// 取得したログイン商品一覧情報を画面表示用一覧オブジェクトにコピー
 		List<ItemBean> itemsBean = beanTools.copyEntityListToItemBeanList(itemsList);
 
-		//一覧表示の並び順と画面表示用一覧オブジェクトをリクエストオブジェクトに設定
-		model.addAttribute("sortType", sortType);
+		//画面表示用一覧オブジェクトをリクエストオブジェクトに設定
 		model.addAttribute("items", itemsBean);
 
 		//トップ画面表示
@@ -83,8 +83,13 @@ public class ClientItemShowController {
 	* @return "client/item/detail" 詳細画面 表示
 	*/
 	@RequestMapping(path = "/client/item/list/{sortType}", method = { RequestMethod.GET })
-	public String showItems(@PathVariable int sortType, int categoryId, Model model) {
+	public String showItems(@PathVariable int sortType, Integer categoryId, Model model) {
 
+		if (categoryId == null) {
+			categoryId = 0;
+		}
+
+		this.sortType = sortType;
 		// 商品格納用のリストを作成
 		List<Item> itemsList = new ArrayList<Item>();
 
@@ -95,17 +100,17 @@ public class ClientItemShowController {
 			category.setId(categoryId);
 
 			// 並び順、カテゴリを条件に商品一覧表示を取得
-			if (sortType == 1) {
+			if (this.sortType == 1) {
 				itemsList = itemRepository.findByCategoryOrderByInsertDate(category);
-			} else if (sortType == 2) {
+			} else if (this.sortType == 2) {
 				itemsList = itemRepository.findByCategoryByOrderByCountAllDesc(category);
 			}
 		} else {
 			// 並び順を元に商品一覧を取得
-			if (sortType == 1) {
+			if (this.sortType == 1) {
 				// 商品情報を全件検索(新着順)
 				itemsList = itemRepository.findAllByOrderByInsertDate();
-			} else if (sortType == 2) {
+			} else if (this.sortType == 2) {
 				// 商品情報を全件検索(売れ筋順)
 				itemsList = itemRepository.findAllByOrderByCountAllDesc();
 			}

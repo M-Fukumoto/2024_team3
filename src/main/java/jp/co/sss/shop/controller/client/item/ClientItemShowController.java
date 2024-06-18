@@ -76,7 +76,7 @@ public class ClientItemShowController {
 	/**
 	* 商品一覧表示処理
 	*
-	* @author ko teiketsu
+	* @author ko teiketsu ryosuke sakagami
 	* @param id  商品ID
 	* @param model  Viewとの値受渡し
 	* @return "client/item/detail" 詳細画面 表示
@@ -104,7 +104,7 @@ public class ClientItemShowController {
 		model.addAttribute("items", itemsBean);
 		
 		// 商品情報をViewへ渡す	
-		return "/client/item/list/" + sortType;
+		return "/client/item/list";
 	}
 
 	@RequestMapping(path = "/client/item/list/{sortType}?categoryId={カテゴリID}", method = { RequestMethod.GET })
@@ -139,6 +139,5 @@ public class ClientItemShowController {
 		model.addAttribute("item", itemBean);
 
 		return "client/item/detail";
-
 	}
 }

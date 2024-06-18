@@ -1,5 +1,6 @@
 package jp.co.sss.shop.controller.client.item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,6 @@ public class ClientItemShowController {
 	/**
 	 * 並び順 
 	 */
-	private String sortType;
 
 	/**
 	 * トップ画面 表示処理
@@ -51,24 +51,24 @@ public class ClientItemShowController {
 	public String index(Model model, Pageable pageable) {
 
 		// 商品一覧表示の並び順を「売れ筋順」に初期化
-		sortType = "uriage";
+		int sortType = 2;
 
 		// 商品情報を全件検索(売れ筋順)
-		List<Item> itemsPage = itemRepository.findAllByOrderByCountAllDesc();
+		List<Item> itemsList = itemRepository.findAllByOrderByCountAllDesc();
 
-		if (itemsPage == null) {
+		if (itemsList == null) {
 			// 商品情報を全件検索(新着順)
-			itemsPage = itemRepository.findAllByOrderByInsertDate();
+			itemsList = itemRepository.findAllByOrderByInsertDate();
 			//新着商品あり：一覧表示の並び順を「新着順」にする
-			sortType = "sintyaku";
+			sortType = 1;
 		}
 		// 取得したログイン商品一覧情報を画面表示用一覧オブジェクトにコピー
-		List<ItemBean> itemsBean = beanTools.copyEntityListToItemBeanList(itemsPage);
-		
+		List<ItemBean> itemsBean = beanTools.copyEntityListToItemBeanList(itemsList);
+
 		//一覧表示の並び順と画面表示用一覧オブジェクトをリクエストオブジェクトに設定
-		model.addAttribute("sortType",sortType);
+		model.addAttribute("sortType", sortType);
 		model.addAttribute("items", itemsBean);
-		
+
 		//トップ画面表示
 		return "/index";
 	}
@@ -82,14 +82,29 @@ public class ClientItemShowController {
 	* @return "client/item/detail" 詳細画面 表示
 	*/
 	@RequestMapping(path = "/client/item/list/{sortType}", method = { RequestMethod.GET })
-	public String showItems(@PathVariable int id, Model model) {
-		List<Item> itemsPage = itemRepository.findAllByOrderByCountAllDesc();
-		if (itemsPage == null) {
+	public String showItems(@PathVariable int sortType, Model model) {
+
+		// 商品格納用のリストを作成
+		List<Item> itemsList = new ArrayList<Item>();
+
+		// 並び順を元に商品一覧を取得
+		if (sortType == 1) {
 			// 商品情報を全件検索(新着順)
-			itemsPage = itemRepository.findAllByOrderByInsertDate();
+			itemsList = itemRepository.findAllByOrderByInsertDate();
+		} else if(sortType == 2){
+			// 商品情報を全件検索(売れ筋順)
+			itemsList = itemRepository.findAllByOrderByCountAllDesc();
 		}
+		
+		// 取得したログイン商品一覧情報を画面表示用一覧オブジェクトにコピー
+		List<ItemBean> itemsBean = beanTools.copyEntityListToItemBeanList(itemsList);
+		
+		//一覧表示の並び順と画面表示用一覧オブジェクトをリクエストオブジェクトに設定
+		model.addAttribute("sortType", sortType);
+		model.addAttribute("items", itemsBean);
+		
 		// 商品情報をViewへ渡す	
-		return "";
+		return "/client/item/list/" + sortType;
 	}
 
 	@RequestMapping(path = "/client/item/list/{sortType}?categoryId={カテゴリID}", method = { RequestMethod.GET })

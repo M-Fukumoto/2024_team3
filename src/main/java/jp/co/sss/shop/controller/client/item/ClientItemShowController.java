@@ -43,6 +43,7 @@ public class ClientItemShowController {
 	/**
 	 * トップ画面 表示処理
 	 *
+	 * @author ko teiketsu ryosuke sakagami
 	 * @param model    Viewとの値受渡し
 	 * @return "index" トップ画面
 	 */
@@ -71,12 +72,6 @@ public class ClientItemShowController {
 		//トップ画面表示
 		return "/index";
 	}
-
-	//	・表示内容の取得については、表示順変更(新着順)、表示順変更
-	//	(売れ筋順)、カテゴリ別検索の機能説明に記載
-	//	・検索条件、表示順に合わせた一覧表示
-	//	・検索条件、表示順の指定がない場合は、すべての商品を「新着
-	//	順」で取得し表示
 
 	/**
 	* 商品一覧表示処理

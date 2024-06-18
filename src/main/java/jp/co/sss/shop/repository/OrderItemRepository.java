@@ -13,6 +13,5 @@ import jp.co.sss.shop.entity.OrderItem;
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
 	
-	//List<Orders> findAllByOrderItemByInsertDateDesc(Integer userId); 
 			
 }

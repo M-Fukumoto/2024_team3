@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import jp.co.sss.shop.bean.ItemBean;
 import jp.co.sss.shop.bean.UserBean;
 import jp.co.sss.shop.entity.Category;
@@ -189,40 +192,46 @@ public class ClientItemShowController {
 		// レビューを全件検索(新着順)
 		reviewList = reviewRepository.findByItemOrderByInsertDateDesc(item);
 
-		// レビューをViewへ渡す
-		model.addAttribute("reviews", reviewList);
-
+		// レビューが存在する場合、Viewへ渡す
+		if (!reviewList.isEmpty()) {
+			model.addAttribute("reviews", reviewList);
+		}
 		// 購入確認フラグを作成
 		boolean buyFlg;
 
-		// ログイン済みの場合
-		User user = new User();
-		if (session.getAttribute("user") != null) {
-			// 購入済み確認用会員情報を作成
-			UserBean userBean = (UserBean) session.getAttribute("user");
-			user = userRepository.getReferenceById(userBean.getId());
+		// 入力エラーの場合
+		if (reviewForm == null) {
+			buyFlg = true;
+		} else {
+			// ログイン済みの場合
+			User user = new User();
+			if (session.getAttribute("user") != null) {
+				// 購入済み確認用会員情報を作成
+				UserBean userBean = (UserBean) session.getAttribute("user");
+				user = userRepository.getReferenceById(userBean.getId());
 
-			// 購入済みかを確認
-			if (!orderItemRepository.findByUserAndItemAndDeleteFlag(user, item).isEmpty()) {
-				// 購入済みの場合
-				buyFlg = true;
+				// 購入済みかを確認
+				if (!orderItemRepository.findByUserAndItemAndDeleteFlag(user, item).isEmpty()) {
+					// 購入済みの場合
+					buyFlg = true;
 
-				// レビュー投稿済かを確認
-				Review review = reviewRepository.findByUserAndItem(user, item);
-				if (review != null) {
+					// レビュー投稿済かを確認
+					Review review = reviewRepository.findByUserAndItem(user, item);
+					if (review != null) {
 
-					//投稿済の場合レビューフォームに値をセット
-					reviewForm.setName(review.getName());
-					reviewForm.setInsertDate(review.getInsertDate());
-					reviewForm.setEvaluation(review.getEvaluation());
-					reviewForm.setCommentReview(review.getCommentReview());
-					model.addAttribute("reviewForm", reviewForm);
+						//投稿済の場合レビューフォームに値をセット
+						reviewForm.setName(review.getName());
+						reviewForm.setEvaluation(review.getEvaluation());
+						reviewForm.setCommentReview(review.getCommentReview());
+						model.addAttribute("reviewForm", reviewForm);
+					}
+				} else {
+					buyFlg = false;
 				}
 			} else {
 				buyFlg = false;
 			}
-		} else {
-			buyFlg = false;
+
 		}
 
 		// 購入情報をViewへ渡す
@@ -231,5 +240,26 @@ public class ClientItemShowController {
 		return "client/item/detail";
 	}
 
-	// 入力チェッククラス
+	//入力チェックメソッド
+
+	@PostMapping("/client/review/add/{id}")
+	public String addReview(@Valid @PathVariable int id, @ModelAttribute ReviewForm reviewForm, Model model,
+			BindingResult result) {
+		
+		// エラーの有無を確認
+		if (result.hasErrors()) {
+			// 入力値にエラーがあった場合、エラー情報をセッションに保持
+			session.setAttribute("result", result);
+			// 商品詳細にフォワード
+			return "client/item/detail";
+		}
+		
+		// 保存用エンティティを作成
+		Review review = new Review();
+		// フォームから値をセット
+		
+		// 商品詳細にredirect
+		return "redilect:client/item/detail" + id;
+	}
+
 }

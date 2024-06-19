@@ -1,8 +1,5 @@
 package jp.co.sss.shop.form;
 
-import java.sql.Date;
-
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 /**
@@ -29,11 +26,7 @@ public class ReviewForm {
 	 */
 	@Size(min = 0, max = 400, message = "{text.maxsize.message}")
 	private String commentReview;
-	/**
-	 * 投稿日付
-	 */
-	@Column(insertable = false)
-	private Date insertDate;
+
 
 	public String getName() {
 		return name;
@@ -67,18 +60,6 @@ public class ReviewForm {
 	 */
 	public void setCommentReview(String commentReview) {
 		this.commentReview = commentReview;
-	}
-	/**
-	 * @return insertDate
-	 */
-	public Date getInsertDate() {
-		return insertDate;
-	}
-	/**
-	 * @param insertDate セットする insertDate
-	 */
-	public void setInsertDate(Date insertDate) {
-		this.insertDate = insertDate;
 	}
 }
 	

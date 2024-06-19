@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import jp.co.sss.shop.entity.Item;
 import jp.co.sss.shop.entity.Review;
+import jp.co.sss.shop.entity.User;
 
 /**
  * reviewテーブル用リポジトリ
@@ -21,4 +22,11 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 	 * @author ko teiketsu
 	 */
 	List<Review> findByItemOrderByInsertDateDesc(Item item);
+	
+	/**
+	 * ユーザとアイテムを条件にレビューを取得
+	 * @param user
+	 * @return
+	 */
+	Review findByUserAndItem(User user,Item item);
 }

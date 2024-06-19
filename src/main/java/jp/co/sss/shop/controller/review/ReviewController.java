@@ -77,5 +77,8 @@ public class ReviewController {
 		model.addAttribute("item", itemBean);
 		//商品詳細画面に遷移
 		return "client/review/list";
+		
+		// Beanに移し替え
+		
 	}
 }

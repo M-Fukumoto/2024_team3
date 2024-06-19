@@ -34,27 +34,29 @@
 
 	<!--/* 一覧表示 */-->
 	<th:block th:if="!${#lists.isEmpty(reviews)}">
-	<ul th:each="review: ${reviews}" >
-		<li th:text="${review.name}"></li>
-		<li class="review_star" th:switch="${review.evaluation}">
-			<span th:case="1">★☆☆☆☆</span>
-			<span th:case="2">★★☆☆☆</span>
-			<span th:case="3">★★★☆☆</span>
-			<span th:case="4">★★★★☆</span>
-			<span th:case="5">★★★★★</span>
-		</li>
-		<li th:text="${review.insertDate}"></li>
-		<li th:text="${review.commentReview}"></li>
-	</ul>
+		<div>
+			<ul th:each="review: ${reviews}" class="input_list">
+				<li th:text="${review.name}"></li>
+				<li class="review_star" th:switch="${review.evaluation}">
+					<span th:case="1">★☆☆☆☆</span>
+					<span th:case="2">★★☆☆☆</span>
+					<span th:case="3">★★★☆☆</span>
+					<span th:case="4">★★★★☆</span>
+					<span th:case="5">★★★★★</span>
+				</li>
+				<li th:text="${review.insertDate}"></li>
+				<li th:text="${review.commentReview}"></li>
+			</ul>
+		</div>
 	</th:block>
-	
-		<!--/* 一覧表示 CSS確認用 */-->
-<!--	<ul  class="input_list review_list">-->
-<!--		<li>坂上</li>-->
-<!--		<li class="review_star">★☆☆☆☆</li>-->
-<!--		<li>2024/11/14</li>-->
-<!--		<li>おもろい</li>-->
-<!--	</ul>-->
+
+	<!--/* 一覧表示 CSS確認用 */-->
+	<!--	<ul  class="input_list review_list">-->
+	<!--		<li>坂上</li>-->
+	<!--		<li class="review_star">★☆☆☆☆</li>-->
+	<!--		<li>2024/11/14</li>-->
+	<!--		<li>おもろい</li>-->
+	<!--	</ul>-->
 
 </body>
 

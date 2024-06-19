@@ -34,14 +34,7 @@ public class ReviewForm {
 	 */
 	@Column(insertable = false)
 	private Date insertDate;
-	/**
-	 * 削除フラグ
-	 */
-	@Column(insertable = false)
-	private Integer deleteFlag;
-	/**
-	 * @return name
-	 */
+
 	public String getName() {
 		return name;
 	}
@@ -86,18 +79,6 @@ public class ReviewForm {
 	 */
 	public void setInsertDate(Date insertDate) {
 		this.insertDate = insertDate;
-	}
-	/**
-	 * @return deleteFlag
-	 */
-	public Integer getDeleteFlag() {
-		return deleteFlag;
-	}
-	/**
-	 * @param deleteFlag セットする deleteFlag
-	 */
-	public void setDeleteFlag(Integer deleteFlag) {
-		this.deleteFlag = deleteFlag;
 	}
 }
 	

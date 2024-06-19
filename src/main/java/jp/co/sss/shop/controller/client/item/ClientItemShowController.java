@@ -7,14 +7,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import jakarta.servlet.http.HttpSession;
 import jp.co.sss.shop.bean.ItemBean;
+import jp.co.sss.shop.bean.UserBean;
 import jp.co.sss.shop.entity.Category;
 import jp.co.sss.shop.entity.Item;
+import jp.co.sss.shop.entity.Review;
+import jp.co.sss.shop.entity.User;
+import jp.co.sss.shop.form.ReviewForm;
 import jp.co.sss.shop.repository.ItemRepository;
+import jp.co.sss.shop.repository.OrderItemRepository;
+import jp.co.sss.shop.repository.ReviewRepository;
+import jp.co.sss.shop.repository.UserRepository;
 import jp.co.sss.shop.service.BeanTools;
 import jp.co.sss.shop.util.Constant;
 
@@ -30,6 +39,27 @@ public class ClientItemShowController {
 	 */
 	@Autowired
 	ItemRepository itemRepository;
+
+	/** 
+	 * レビュー情報
+	 */
+	@Autowired
+	ReviewRepository reviewRepository;
+
+	/** 
+	 * 注文詳細情報
+	 */
+	@Autowired
+	OrderItemRepository orderItemRepository;
+
+	/** 
+	 * 会員情報
+	 */
+	@Autowired
+	UserRepository userRepository;
+
+	@Autowired
+	HttpSession session;
 
 	/**
 	 * Entity、Form、Bean間のデータコピーサービス
@@ -137,7 +167,7 @@ public class ClientItemShowController {
 	* @return "client/item/detail" 詳細画面 表示
 	*/
 	@RequestMapping(path = "/client/item/detail/{id}", method = RequestMethod.GET)
-	public String showItem(@PathVariable int id, Model model) {
+	public String showItem(@ModelAttribute ReviewForm reviewForm, @PathVariable int id, Model model) {
 
 		// 対象の商品情報を取得
 		Item item = itemRepository.findByIdAndDeleteFlag(id, Constant.NOT_DELETED);
@@ -153,6 +183,53 @@ public class ClientItemShowController {
 		// 商品情報をViewへ渡す
 		model.addAttribute("item", itemBean);
 
+		// レビュー格納用のリストを作成
+		List<Review> reviewList = new ArrayList<Review>();
+
+		// レビューを全件検索(新着順)
+		reviewList = reviewRepository.findByItemOrderByInsertDateDesc(item);
+
+		// レビューをViewへ渡す
+		model.addAttribute("reviews", reviewList);
+
+		// 購入確認フラグを作成
+		boolean buyFlg;
+
+		// ログイン済みの場合
+		User user = new User();
+		if (session.getAttribute("user") != null) {
+			// 購入済み確認用会員情報を作成
+			UserBean userBean = (UserBean) session.getAttribute("user");
+			user = userRepository.getReferenceById(userBean.getId());
+
+			// 購入済みかを確認
+			if (!orderItemRepository.findByUserAndItemAndDeleteFlag(user, item).isEmpty()) {
+				// 購入済みの場合
+				buyFlg = true;
+
+				// レビュー投稿済かを確認
+				Review review = reviewRepository.findByUserAndItem(user, item);
+				if (review != null) {
+
+					//投稿済の場合レビューフォームに値をセット
+					reviewForm.setName(review.getName());
+					reviewForm.setInsertDate(review.getInsertDate());
+					reviewForm.setEvaluation(review.getEvaluation());
+					reviewForm.setCommentReview(review.getCommentReview());
+					model.addAttribute("reviewForm", reviewForm);
+				}
+			} else {
+				buyFlg = false;
+			}
+		} else {
+			buyFlg = false;
+		}
+
+		// 購入情報をViewへ渡す
+		model.addAttribute("buyFlg", buyFlg);
+
 		return "client/item/detail";
 	}
+
+	// 入力チェッククラス
 }

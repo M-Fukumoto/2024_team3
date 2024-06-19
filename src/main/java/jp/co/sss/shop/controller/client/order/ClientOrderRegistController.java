@@ -1,4 +1,6 @@
 package jp.co.sss.shop.controller.client.order;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -14,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jp.co.sss.shop.bean.BasketBean;
 import jp.co.sss.shop.bean.OrderBean;
+import jp.co.sss.shop.bean.OrderItemBean;
 import jp.co.sss.shop.bean.UserBean;
 import jp.co.sss.shop.entity.Item;
 import jp.co.sss.shop.entity.Order;
@@ -169,7 +172,7 @@ public class ClientOrderRegistController {
 	 * @param model  Viewとの値受渡し
 	 * @return "client/order/check" 注文確認画面 表示
 	 */
-	/*@RequestMapping(path = "/client/order/check", method = RequestMethod.GET)
+	@RequestMapping(path = "/client/order/check", method = RequestMethod.GET)
 	public String orderCheck(Model model) {
 		//セッションスコープから注文情報を取得
 		OrderForm orderForm = (OrderForm) session.getAttribute("orderForm");
@@ -225,7 +228,7 @@ public class ClientOrderRegistController {
 		}
 		//注文確認画面表示
 		return "client/order/check";
-	}*/
+	}
 	/**
 	 * 支払方法選択画面で、戻るボタン押下処理
 	 * @return "redirect:/client/order/address/input" 登録画面表示処理へリダイレクト

@@ -73,74 +73,69 @@ public class ClientOrderRegistController {
 	}
 	
 	@RequestMapping(path = "/client/order/address/input", method = RequestMethod.GET)
-	public String addressInput(@Valid Model model) {
-		
-		//- セッションスコープから注文入力フォーム情報を取得
+	public String orderAddressInput(Model model) {
+		//セッションスコープから注文入力フォーム情報を取得
 		OrderForm orderForm = (OrderForm) session.getAttribute("orderForm");
-		//- 注文入力フォーム情報をリクエストスコープに設定
+		//注文入力フォーム情報をリクエストスコープに設定
 		model.addAttribute("orderForm", orderForm);
-		
+		//セッションスコープに入力エラー情報がある場合
 		BindingResult result = (BindingResult) session.getAttribute("result");
 		if (result != null) {
-			//セッションにエラー情報がある場合、エラー情報をスコープに設定
+			//取得したエラー情報をリクエストスコープに設定
 			model.addAttribute("org.springframework.validation.BindingResult.orderForm", result);
-			// セッションにエラー情報を削除
+			//セッションスコープから、エラー情報を削除
 			session.removeAttribute("result");
 		}
-		//・登録画面表示
-		//- フォワード: "client/order/address_input
+		//登録画面表示
 		return "client/order/address_input";
 	}
 	
 	@RequestMapping(path = "/client/order/payment/input", method = RequestMethod.POST)
-	public String paymentInput(OrderForm orderForm, Model model) {
-		//・リクエストスコープに画面から入力されたフォーム情報を注文入力フォーム情報として保存
-		model.addAttribute("orderForm", orderForm);
-		
-		//・BindingResultオブジェクトに入力エラー情報がある場合
-		BindingResult result = (BindingResult) session.getAttribute("result");
-		if (result != null) {
-			
-		//- 入力エラー情報をセッションスコープに設定
-			session.setAttribute("org.springframework.validation.BindingResult.orderForm", result);
-		
-			//- 届け先入力画面表示処理にリダイレクト
+	public String orderPaymentInputRedirect(@Valid @ModelAttribute OrderForm orderForm, BindingResult result,
+			Model model) {
+		//リクエストスコープに画面から入力されたフォーム情報を注文入力フォーム情報として保存
+		session.setAttribute("orderForm",orderForm);
+		//BindingResultオブジェクトに入力エラー情報がある場合
+		if (result.hasErrors()) {
+			//入力エラー情報をセッションスコープに設定
+			session.setAttribute("result",result);
+			//届け先入力画面表示処理にリダイレクト
 			return "redirect:/client/order/address/input";
+		} else {
+			//入力エラーがない場合
+			//支払方法選択画面表示処理にリダイレクト
+			return "redirect:/client/order/payment/input";
 		}
-		//・入力エラーがない場合
-		//- 支払方法選択画面表示処理にリダイレクト
-		return "redirect:/client/order/payment/input";
-
 	}
 	
 	@RequestMapping(path = "/client/order/payment/input", method = RequestMethod.GET)
-	public String paymentInput2(Model model) {
-		//・セッションスコープから注文入力フォーム情報を取得
+	public String orderPaymentInput(Model model) {
+		//セッションスコープから注文入力フォーム情報を取得
 		OrderForm orderForm = (OrderForm) session.getAttribute("orderForm");
-		//・注文フォーム情報をリクエストスコープに設定
+		//注文フォーム情報をリクエストスコープに設定
 		model.addAttribute("orderForm", orderForm);
-		//・支払方法選択画面表示
+		//支払方法選択画面表示
 		return "client/order/payment_input";
 	}
 	
-	/*@RequestMapping(path = "/client/order/check", method = RequestMethod.POST)
-	public String check() {
-		//・セッションスコープから注文入力フォーム情報を取得
+	@RequestMapping(path = "/client/order/check", method = RequestMethod.POST)
+	public String orderCheckRedirect(Integer payMethod) {
+		//セッションスコープから注文入力フォームを取得
 		OrderForm orderForm = (OrderForm) session.getAttribute("orderForm");
-		//・画面から入力された支払方法を取得した注文入力フォーム情報に設定
-		orderForm.setPayMethod();
-		//・注文入力フォーム情報をセッションスコープに保存
+		//画面から入力された支払方法を取得した注文入力フォーム情報に設定
+		orderForm.setPayMethod(payMethod);
+		//注文入力フォーム情報をセッションスコープに保存
 		session.setAttribute("orderForm", orderForm);
-		//・注文確認画面表示処理へリダイレクト
-		return "/client/order/check";
+		//注文確認画面表示処理へリダイレクト
+		return "redirect:/client/order/check";
 	}
 	
-	@RequestMapping(path = "/client/order/check", method = RequestMethod.GET)
+	/*@RequestMapping(path = "/client/order/check", method = RequestMethod.GET)
 	public String check2(Model model) {
 		//・セッションスコープから注文情報を取得
 		OrderForm orderForm = (OrderForm) session.getAttribute("orderForm");
 		//・セッションスコープから買い物かご情報を取得
-		List<BasketBean> basketBean = (List<BasketBean>) session.getAttribute("basket");
+		List<BasketBean> basketBean = (List<BasketBean>) session.getAttribute("basketBean");
 		
 		//・注文商品の最新情報をDBから取得し、の在庫チェックをする
 		for (int i = 0; i < basketBean.size(); i++) {
@@ -181,7 +176,7 @@ public class ClientOrderRegistController {
 	public String paymentBack() {
 		//・支払い方法選択画面 表示処理へリダイレクト
 
-		return "/client/order/address/input";
+		return "redirect:/client/order/address/input";
 	}
 
 	@RequestMapping(path = "/client/order/complete", method = RequestMethod.POST)
@@ -210,13 +205,17 @@ public class ClientOrderRegistController {
 		//・セッションスコープの注文入力フォーム情報と買い物かご情報を削除
 		
 		//・注文完了画面表示処理にリダイレクト
-		return "/client/order/complete";
+		return "redirect:/client/order/complete";
 	}
 	
 	@RequestMapping(path = "/client/order/complete", method = RequestMethod.GET)
 	public String complete2() {
 		//・注文完了画面表示
 		return "client/order/complete";
+	}@RequestMapping(path = "/client/order/payment/back", method = RequestMethod.POST)
+	public String orderPyamentBackRedirect() {
+		//支払い方法選択画面 表示処理へリダイレクト
+		return  "redirect:/client/order/address/input";
 	}*/
 
 

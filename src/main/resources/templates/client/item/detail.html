@@ -71,7 +71,10 @@
 					<li>
 						<p class="input_title">コメント</p><textarea th:field="*{commentReview}"></textarea>
 					</li>
-					<li th:if="${buyFlg}"><input type="submit" value="投稿" /></li>
+					<li th:if="${buyFlg}">
+						<input  th:if="${#lists.isEmpty(reviewForm)}" type="submit" value="投稿" />
+						<input  th:if="!${#lists.isEmpty(reviewForm)}" type="submit" value="更新" />
+						</li>
 					<li th:if="!${buyFlg}">レビューを投稿するには商品を購入している必要があります。</li>
 				</ul>
 			</form>

@@ -189,9 +189,10 @@ public class ClientItemShowController {
 		// レビューを全件検索(新着順)
 		reviewList = reviewRepository.findByItemOrderByInsertDateDesc(item);
 
-		// レビューをViewへ渡す
-		model.addAttribute("reviews", reviewList);
-
+		// レビューが存在する場合、Viewへ渡す
+		if (!reviewList.isEmpty()) {
+			model.addAttribute("reviews", reviewList);
+		}
 		// 購入確認フラグを作成
 		boolean buyFlg;
 
@@ -231,5 +232,5 @@ public class ClientItemShowController {
 		return "client/item/detail";
 	}
 
-	// 入力チェッククラス
+	//入力チェックメソッド
 }

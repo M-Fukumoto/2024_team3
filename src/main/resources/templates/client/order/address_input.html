@@ -5,7 +5,7 @@
 <head>
 	<title th:text="#{order}+#{title.detail}+' | '+ #{shop.title}">| シェアードショップ</title>
 	<meta charset="UTF-8" />
-</head>>
+</head>
 
 <body class="user">
 	
@@ -14,25 +14,34 @@
 	<h2 class="title">お届け先入力</h2>
 	<p class="input_message">お届け先情報を入力してください。 </p>
 	<div class="user_info_form_area">
-		<form th:action="@{/client/order/payment/input}" method="post">
-			
+		<form th:action="@{/client/order/payment/input}" method="post"th:object="${orderForm}">
 
+		<th:block th:if="${#fields.hasErrors()}">
+				<ul class="error_list">
+					<li th:each="err:${#fields.detailedErrors()}" th:text="${err.message}"></li>
+				</ul>
+				<br />
+			</th:block>
 			<ul class="input_list">
 				<li>
 					<label><span class="input_title">郵便番号</span></label>
-					<input type="text" id="postalCode" name="postalCode">
+					<input type="text" id="postalCode" name="postalCode"th:field="*{postalCode}">
+					<span th:errors="*{postalCode}"></span>
 				</li>
 				<li>
 					<label><span class="input_title">住所</span></label>
-					<textarea rows="6" id="address" name="address"></textarea>
+					<textarea rows="6" id="address" name="address"th:field="*{address}"></textarea>
+					<span th:errors="*{address}"></span>
 				</li>
 				<li>
 					<label><span class="input_title">氏名</span></label>
-					<input type="text" id="name" name="name">
+					<input type="text" id="name" name="name"th:field="*{name}">
+					<span th:errors="*{name}"></span>
 				</li>
 				<li>
 					<label><span class="input_title">電話番号</span></label>
-					<input type="text" id="phoneNumber" name="phoneNumber">
+					<input type="text" id="phoneNumber" name="phoneNumber"th:field="*{phoneNumber}">
+					<span th:errors="*{phoneNumber}"></span>
 				</li>
 			</ul>
 			<input type="hidden" id="id" name="id" value="3">

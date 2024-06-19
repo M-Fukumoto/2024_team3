@@ -11,16 +11,16 @@
 
 	<article class="main">
 
-		<h2 class="title" th:text="${title.order.check}"></h2>
-		<p class="check_message" th:text="${msg.order.check}"></p>
+		<h2 class="title" th:text="#{title.order.check}"></h2>
+		<p class="check_message" th:text="#{msg.order.check}"></p>
 		<table class="list_table item_detail">
 			<tbody>
 				<tr>
-					<th th:text="${data.basket.item.name}"></th>
-					<th th:text="${data.item.image}"></th>
-					<th th:text="${data.unit.price}"></th>
-					<th th:text="${data.order.num}"></th>
-					<th th:text="${data.subtotal}"></th>
+					<th th:text="#{data.basket.item.name}"></th>
+					<th th:text="#{data.item.image}"></th>
+					<th th:text="#{data.unit.price}"></th>
+					<th th:text="#{data.order.num}"></th>
+					<th th:text="#{data.subtotal}"></th>
 				</tr>
 				<tr>
 					<td>辞書</td>
@@ -34,7 +34,7 @@
 				</tr>
 				<tr>
 					<td colspan="3"></td>
-					<td class="total" th:text="${data.total}"></td>
+					<td class="total" th:text="#{data.total}"></td>
 					<td class="total">2000</td>
 				</tr>
 			</tbody>
@@ -42,31 +42,31 @@
 
 		<div class="user_info_form_area">
 			<table class="detail_table address">
-				<caption class="table_caption" th:text="${data.address}"></caption>
+				<caption class="table_caption" th:text="#{data.address}"></caption>
 				<tbody>
 					<tr>
-						<th th:text="${data.address.postalcode}"></th>
+						<th th:text="#{data.address.postalcode}"></th>
 						<td>1111111</td>
 					</tr>
 					<tr>
-						<th th:text="${ata.address.address}"></th>
+						<th th:text="#{ata.address.address}"></th>
 						<td>東京都台東区4-5-6 ABCマンション5階</td>
 					</tr>
 					<tr>
-						<th th:text="${data.address.name}"></th>
+						<th th:text="#{data.address.name}"></th>
 						<td>一般三郎</td>
 					</tr>
 					<tr>
-						<th th:text="${data.address.phonenumber}"></th>
+						<th th:text="#{data.address.phonenumber}"></th>
 						<td>0123456789</td>
 					</tr>
 				</tbody>
 			</table>
 			<table class="detail_table pay">
-				<caption class="table_caption" th:text="${data.paymethod}"></caption>
+				<caption class="table_caption" th:text="#{data.paymethod}"></caption>
 				<tbody>
 					<tr>
-						<th th:text="${paymethod.str}"></th>
+						<th th:text="#{paymethod.str}"></th>
 						<td>
 							<span>クレジットカード</span>
 

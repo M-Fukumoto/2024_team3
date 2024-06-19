@@ -3,6 +3,7 @@ package jp.co.sss.shop.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import jp.co.sss.shop.entity.Item;
@@ -29,4 +30,8 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 	 * @return
 	 */
 	Review findByUserAndItem(User user,Item item);
+	
+	// 3件
+	@Query("SELECT r FROM Review r WHERE ROWNUM <= 1")
+	List<Review> findAll3();
 }

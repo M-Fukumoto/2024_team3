@@ -26,8 +26,9 @@ public class ReviewForm {
 	 */
 	@Size(min = 0, max = 400, message = "{text.maxsize.message}")
 	private String commentReview;
-
-
+	/**
+	 * @return name
+	 */
 	public String getName() {
 		return name;
 	}
@@ -61,5 +62,6 @@ public class ReviewForm {
 	public void setCommentReview(String commentReview) {
 		this.commentReview = commentReview;
 	}
+
 }
 	

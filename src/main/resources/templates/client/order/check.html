@@ -8,90 +8,82 @@
 </head>
 
 <body class="user">
-	
-		<article class="main">
-			
-	<h2 class="title">注文内容確認</h2>
-	<p class="check_message">以下の内容でよろしければ、ご注文を確定してください。 </p>
-	
 
-	<!-- 在庫不足のメッセージ -->
-	
+	<article class="main">
 
-	<!-- 注文情報 -->
-	
-	<table class="list_table item_detail">
-		<tbody><tr>
-			<th>商品名</th>
-			<th>商品画像</th>
-			<th>単価</th>
-			<th>数量</th>
-			<th>小計</th>
-		</tr>
-		<tr>
-			<td>辞書</td>
-			<td>
-				<img src="images/dictionary.jpg">
-				
-			</td>
-			<td>2000</td>
-			<td>1</td>
-			<td>2000</td>
-		</tr>
-		<tr>
-			<td colspan="3"></td>
-			<td class="total">合計</td>
-			<td class="total">2000</td>
-		</tr>
-	</tbody>
-	</table>
-	
-	<div class="user_info_form_area">
-		<table class="detail_table address">
-			<caption class="table_caption">お届け先</caption>
+		<h2 class="title" th:text="${title.order.check}"></h2>
+		<p class="check_message" th:text="${msg.order.check}"></p>
+		<table class="list_table item_detail">
 			<tbody>
 				<tr>
-				<th>郵便番号</th>
-				<td>1111111</td>
-			</tr>
-			<tr>
-				<th>住所</th>
-				<td>東京都台東区4-5-6 ABCマンション5階</td>
-			</tr>
-			<tr>
-				<th>氏名</th>
-				<td>一般三郎</td>
-			</tr>
-			<tr>
-				<th>電話番号</th>
-				<td>0123456789</td>
-			</tr>
-		</tbody>
-		</table>
-		<table class="detail_table pay">
-			<caption class="table_caption">お支払い方法</caption>
-			<tbody><tr>
-				<th>お支払い方法</th>
-				<td>
-					<span>クレジットカード</span>
-					
-				</td>
-			</tr>
-		</tbody>
-		</table>
-		
-		<form th:action="@{/client/order/complete}" method="post">
-			<input class="send_button" type="submit" value="ご注文の確定">
-		</form>
-		<form th:action="@{/client/order/payment/back}" method="post" class="update">
-			<input type="submit" value="戻る" class="back_button">
-		</form>
-	</div>
-	
-	
-	<!-- 注文情報がない場合、トップへ戻る -->
-	
+					<th th:text="${data.basket.item.name}"></th>
+					<th th:text="${data.item.image}"></th>
+					<th th:text="${data.unit.price}"></th>
+					<th th:text="${data.order.num}"></th>
+					<th th:text="${data.subtotal}"></th>
+				</tr>
+				<tr>
+					<td>辞書</td>
+					<td>
+						<img src="images/dictionary.jpg">
 
-		</article>
-		
-</body></html>
+					</td>
+					<td>2000</td>
+					<td>1</td>
+					<td>2000</td>
+				</tr>
+				<tr>
+					<td colspan="3"></td>
+					<td class="total" th:text="${data.total}"></td>
+					<td class="total">2000</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="user_info_form_area">
+			<table class="detail_table address">
+				<caption class="table_caption" th:text="${data.address}"></caption>
+				<tbody>
+					<tr>
+						<th th:text="${data.address.postalcode}"></th>
+						<td>1111111</td>
+					</tr>
+					<tr>
+						<th th:text="${ata.address.address}"></th>
+						<td>東京都台東区4-5-6 ABCマンション5階</td>
+					</tr>
+					<tr>
+						<th th:text="${data.address.name}"></th>
+						<td>一般三郎</td>
+					</tr>
+					<tr>
+						<th th:text="${data.address.phonenumber}"></th>
+						<td>0123456789</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="detail_table pay">
+				<caption class="table_caption" th:text="${data.paymethod}"></caption>
+				<tbody>
+					<tr>
+						<th th:text="${paymethod.str}"></th>
+						<td>
+							<span>クレジットカード</span>
+
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<form th:action="@{/client/order/complete}" method="post">
+				<input class="send_button" type="submit" value="ご注文の確定">
+			</form>
+			<form th:action="@{/client/order/payment}" method="post" class="update">
+				<input type="submit" value="戻る" class="back_button">
+			</form>
+		</div>
+	</article>
+
+</body>
+
+</html>

@@ -16,7 +16,6 @@ import jp.co.sss.shop.entity.Item;
 import jp.co.sss.shop.entity.Order;
 import jp.co.sss.shop.entity.OrderItem;
 import jp.co.sss.shop.form.ItemForm;
-import jp.co.sss.shop.form.OrderForm;
 
 /**
  * オブジェクト間でのフィールドコピー処理を行うクラス
@@ -219,10 +218,5 @@ public class BeanTools {
 			orderItemBeanList.add(orderItemBean);
 		}
 		return orderItemBeanList;
-	}
-
-	public OrderBean copyFormToOrderBean(OrderForm orderForm, Integer total, Integer userId) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
 	}
 }

@@ -8,54 +8,47 @@
 </head>
 
 <body class="user">
-	
-		<article class="main">
-			
-	<h2 class="title">お支払い方法選択</h2>
-	<p class="input_message">お支払い方法を選択してください。 </p>
 
-	<div class="user_info_form_area">
+	<article class="main">
+
+		<h2 class="title" th:text="#{title.order.payment.input}"></h2>
+		<p class="input_message" th:text="#{msg.order.payment.input}"></p>
+
+		<div class="user_info_form_area">
 			<ul class="payment_method_select">
 				<li>
 					<label class="radio_label">
-						<input type="radio" name="payMethod" value="1" checked="checked" onclick=" payChange();">
-						クレジットカード
-					</label>
+						<input type="radio" name="payMethod" value="1" checked="checked"
+							onclick=" payChange();" th:text="#{paymethod.credit.str}"></label>
 				</li>
 				<li>
 					<label class="radio_label">
-						
-						<input type="radio" name="payMethod" value="2">銀行振込
-					</label>
+						<input type="radio" name="payMethod" value="2" th:text="#{paymethod.bank.str}"></label>
 				</li>
 				<li>
 					<label class="radio_label">
-						
-						<input type="radio" name="payMethod" value="3">着払い
-					</label>
+						<input type="radio" name="payMethod" value="3" th:text="#{paymethod.onarrival.str}"></label>
 				</li>
 				<li>
 					<label class="radio_label">
-						
-						<input type="radio" name="payMethod" value="4">電子マネー
-					</label>
+						<input type="radio" name="payMethod" value="4" th:text="#{paymethod.emoney.str}"></label>
 				</li>
 				<li>
 					<label class="radio_label">
-						
-						<input type="radio" name="payMethod" value="5">コンビニ決済
-					</label>
+						<input type="radio" name="payMethod" value="5" th:text="#{paymethod.convenience.str}"></label>
 				</li>
 			</ul>
 			<form th:action="@{/client/order/check}" method="post">
-			<input type="submit" class="send_button" value="次へ">
+				<input type="submit" class="send_button" value="次へ">
 
-		</form>
-		<form th:action="@{/client/order/address/input}" method="post" class="update">
-			<input type="submit" class="back_button" value="戻る">
-		</form>
-	</div>
+			</form>
+			<form th:action="@{/client/order/address/input}" method="post" class="update">
+				<input type="submit" class="back_button" value="戻る">
+			</form>
+		</div>
 
-		</article>
-	
-</body></html>
+	</article>
+
+</body>
+
+</html>

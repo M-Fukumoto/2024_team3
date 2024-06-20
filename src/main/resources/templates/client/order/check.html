@@ -13,63 +13,68 @@
 
 		<h2 class="title" th:text="#{title.order.check}"></h2>
 		<p class="check_message" th:text="#{msg.order.check}"></p>
-		<table class="list_table item_detail">
+		<table class="list_table item_detail" th:object="${item}">
 			<tbody>
 				<tr>
-					<th th:text="#{data.basket.item.name}"></th>
-					<th th:text="#{data.item.image}"></th>
-					<th th:text="#{data.unit.price}"></th>
-					<th th:text="#{data.order.num}"></th>
-					<th th:text="#{data.subtotal}"></th>
+					<th th:text="#{data.basket.item.name}">[[#{data.basket.item.name}]]</th>
+					<th th:text="#{data.item.image}">[[#{data.item.image}}]]</th>
+					<th th:text="#{data.unit.price}">[[#{data.unit.price}]]</th>
+					<th th:text="#{data.order.num}">[[#{data.order.num}]]</th>
+					<th>[[#{data.subtotal}]]</th>
 				</tr>
-				<tr>
-					<td>辞書</td>
-					<td>
-						<img src="images/dictionary.jpg">
-
-					</td>
-					<td>2000</td>
-					<td>1</td>
-					<td>2000</td>
+				<tr th:each="item:${basketBean}">
+					<td th:text="${item.name}"></td>
+					<span th:if="*{image != null}">
+						<img th:src="@{/images/{image}(image=*{image})}"></img>
+					</span>
+					<span th:if="*{image == null}">
+						<img th:src="@{/images/common/no_image.jpg}"></img>
+					</span>
+					<td th:text="${item.price}"></td>
+					<td th:text="${item.orderNum}"></td>
+					<td th:text="${item.subtotal}"></td>
 				</tr>
 				<tr>
 					<td colspan="3"></td>
-					<td class="total" th:text="#{data.total}"></td>
-					<td class="total">2000</td>
+					<td class="total">[[#{data.total}]]</td>
+					<td th:text="${total}"></td>
 				</tr>
 			</tbody>
 		</table>
 
 		<div class="user_info_form_area">
-			<table class="detail_table address">
-				<caption class="table_caption" th:text="#{data.address}"></caption>
+			<table class="detail_table address" th:object="${order}">
+				<caption class="table_caption">[[#{data.address.address}]]</caption>
 				<tbody>
 					<tr>
-						<th th:text="#{data.address.postalcode}"></th>
-						<td>1111111</td>
+						<th>[[#{data.address.postalcode}]]</th>
+						<td th:text="*{postalCode}"></td>
 					</tr>
 					<tr>
-						<th th:text="#{ata.address.address}"></th>
-						<td>東京都台東区4-5-6 ABCマンション5階</td>
+						<th>[[#{data.address.address}]]</th>
+						<td th:text="*{address}"></td>
 					</tr>
 					<tr>
-						<th th:text="#{data.address.name}"></th>
-						<td>一般三郎</td>
+						<th>[[#{data.address.name}]]</th>
+						<td th:text="*{name}"></td>
 					</tr>
 					<tr>
-						<th th:text="#{data.address.phonenumber}"></th>
-						<td>0123456789</td>
+						<th>[[#{data.address.phonenumber}]]</th>
+						<td th:text="*{phoneNumber}"></td>
 					</tr>
 				</tbody>
 			</table>
 			<table class="detail_table pay">
-				<caption class="table_caption" th:text="#{data.paymethod}"></caption>
+				<caption class="table_caption">[[#{data.paymethod}]]</caption>
 				<tbody>
 					<tr>
-						<th th:text="#{paymethod.str}"></th>
-						<td>
-							<span>クレジットカード</span>
-
+						<th>[[#{data.paymethod}]]</th>
+						<td th:switch="*{payMethod}">
+							<span th:case="1">[[#{paymethod.credit.str}]]</span>
+							<span th:case="2">[[#{paymethod.bank.str}]]</span>
+							<span th:case="3">[[#{paymethod.onarrival.str}]]</span>
+							<span th:case="4">[[#{paymethod.emoney.str}]]</span>
+							<span th:case="5">[[#{paymethod.convenience.str}]]</span>
 						</td>
 					</tr>
 				</tbody>

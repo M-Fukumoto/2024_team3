@@ -24,23 +24,19 @@
 			<ul class="input_list">
 				<li>
 					<label><span class="input_title">[[#{orderForm.postalCode}]]</span></label>
-					<input type="text" id="postalCode" name="postalCode"th:field="*{postalCode}">
-					<span th:errors="*{postalCode}"></span>
+					<input type="text" id="postalCode" name="postalCode">
 				</li>
 				<li>
 					<label><span class="input_title">[[#{orderForm.address}]]</span></label>
-					<textarea rows="6" id="address" name="address"th:field="*{address}"></textarea>
-					<span th:errors="*{address}"></span>
+					<textarea rows="6" id="address" name="address"></textarea>
 				</li>
 				<li>
 					<label><span class="input_title">[[#{orderForm.name}]]</span></label>
-					<input type="text" id="name" name="name"th:field="*{name}">
-					<span th:errors="*{name}"></span>
+					<input type="text" id="name" name="name">
 				</li>
 				<li>
 					<label><span class="input_title">[[#{orderForm.phoneNumber}]]</span></label>
-					<input type="text" id="phoneNumber" name="phoneNumber"th:field="*{phoneNumber}">
-					<span th:errors="*{phoneNumber}"></span>
+					<input type="text" id="phoneNumber" name="phoneNumber">
 				</li>
 			</ul>
 			<input type="hidden" id="id" name="id" value="3">

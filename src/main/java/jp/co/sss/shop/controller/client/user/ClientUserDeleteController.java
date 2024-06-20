@@ -114,6 +114,9 @@ public class ClientUserDeleteController {
 		// 会員情報を保存
 		userRepository.save(user);
 
+		// セッション情報を無効にする
+		session.invalidate();
+
 		// セッションの削除対象情報を削除
 		session.removeAttribute("userForm");
 

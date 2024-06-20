@@ -79,15 +79,15 @@ public class ClientBasketController {
 	 */
 	@PostMapping("/client/basket/add")
 	public String addBasket(Integer id) {
+		// アイテム情報を取得
+		 Item item = iR.getReferenceById(id);
 		// セッションスコープに買い物かご情報があるかを確認
 		if (session.getAttribute("basket") == null) {
 			// なければ、買い物かご情報を生成
 			basket = new ArrayList<BasketBean>();
-			// アイテム情報を取得
-			 Item item = iR.getReferenceById(id);
 			// 買い物かごにアイテムを追加
-			BasketBean bB = new BasketBean(item.getId(),item.getName(),item.getStock());
-			basket.add(bB);
+			BasketBean basketBean = new BasketBean(item.getId(),item.getName(),item.getStock());
+			basket.add(basketBean);
 		} else {
 			// 買い物かごに追加対象の商品があるかを確認
 			// 買い物かごの取り出し
@@ -98,13 +98,18 @@ public class ClientBasketController {
 				// カート内アイテムの取り出し
 				BasketBean bB = basket.get(i);
 
+				// 存在確認
 				if (bB.getId() == id) {
+					// 在庫数を増やす
 					bB.setOrderNum(bB.getOrderNum() + 1);
-				}
-				// 存在しない場合
-				else {
+					// 更新済みのデータをセット
+					basket.set(i, bB);
+					break;
+				}else if(i == basket.size() -1) {
 					// 買い物かごにアイテムを追加
-					basket.add(bB);
+					BasketBean basketBean = new BasketBean(item.getId(),item.getName(),item.getStock());
+					basket.add(basketBean);
+					break;
 				}
 			}
 		}

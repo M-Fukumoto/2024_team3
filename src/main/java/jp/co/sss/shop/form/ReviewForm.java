@@ -14,8 +14,8 @@ public class ReviewForm {
 	/**
 	 * 投稿者名
 	 */
-	@NotBlank
-	@Size(min = 1, max = 40, message = "{text.maxsize.message}")
+	@NotBlank(message = "投稿者名は必須項目です。")
+	@Size(min = 1, max = 40, message = "投稿者名は1～40文字で入力してください")
 	private String	name;
 	/**
 	 * 評価
@@ -24,7 +24,7 @@ public class ReviewForm {
 	/**
 	 * コメント
 	 */
-	@Size(min = 0, max = 400, message = "{text.maxsize.message}")
+	@Size(min = 0, max = 400, message = "コメントは400字以内で入力してください。")
 	private String commentReview;
 	/**
 	 * @return name

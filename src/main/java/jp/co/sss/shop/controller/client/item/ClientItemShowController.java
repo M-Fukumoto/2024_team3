@@ -173,6 +173,14 @@ public class ClientItemShowController {
 	@RequestMapping(path = "/client/item/detail/{id}", method = { RequestMethod.GET, RequestMethod.POST })
 	public String showItem(@ModelAttribute ReviewForm reviewForm, @PathVariable int id, Model model) {
 
+		BindingResult result = (BindingResult) session.getAttribute("result");
+		if (result != null) {
+			//セッションにエラー情報がある場合、エラー情報をスコープに設定
+			model.addAttribute("org.springframework.validation.BindingResult.reviewForm", result);
+			// セッションにエラー情報を削除
+			session.removeAttribute("result");
+		}
+		
 		// 対象の商品情報を取得
 		Item item = itemRepository.findByIdAndDeleteFlag(id, Constant.NOT_DELETED);
 
@@ -246,8 +254,6 @@ public class ClientItemShowController {
 
 		return "client/item/detail";
 	}
-
-	//入力チェックメソッド
 
 	@PostMapping("/client/review/add/{id}")
 	public String addReview(@Valid @ModelAttribute ReviewForm reviewForm, BindingResult result, Model model,

@@ -61,9 +61,11 @@ public class ClientBasketController {
 				BasketBean bB = basket.get(i);
 				// 在庫状況を更新
 				bB.setStock(iR.getReferenceById(bB.getId()).getStock());
-				// セッションに買い物かごデータを代入
-				session.setAttribute("basket", basket);
+				// リストに保存
+				basket.set(i, bB);
 			}
+			// セッションに買い物かごデータを代入
+			session.setAttribute("basket", basket);
 		}
 
 		

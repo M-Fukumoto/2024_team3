@@ -15,6 +15,7 @@
 		<p class="input_message">[[#{msg.order.payment.input}]]</p>
 
 		<div class="user_info_form_area">
+			<form  th:action="@{/client/order/check}" method="post">
 			<ul class="payment_method_select">
 				<li>
 					<label class="radio_label">
@@ -38,15 +39,12 @@
 						<input type="radio" name="payMethod" value="5">[[#{paymethod.convenience.str}]]</label>
 				</li>
 			</ul>
-			<form th:action="@{/client/order/check}" method="post">
-				<input type="submit" class="send_button" value="次へ">
-
+			<input type="submit" class="send_button" value="次へ">
 			</form>
 			<form th:action="@{/client/order/address/input}" method="post" class="update">
 				<input type="submit" class="back_button" value="戻る">
 			</form>
 		</div>
-
 	</article>
 
 </body>

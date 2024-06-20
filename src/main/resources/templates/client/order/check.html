@@ -13,37 +13,30 @@
 
 		<h2 class="title" th:text="#{title.order.check}"></h2>
 		<p class="check_message" th:text="#{msg.order.check}"></p>
-		<table class="list_table item_detail" th:object="${item}">
+		<table class="list_table item_detail">
 			<tbody>
 				<tr>
-					<th th:text="#{data.basket.item.name}">[[#{data.basket.item.name}]]</th>
-					<th th:text="#{data.item.image}">[[#{data.item.image}}]]</th>
-					<th th:text="#{data.unit.price}">[[#{data.unit.price}]]</th>
-					<th th:text="#{data.order.num}">[[#{data.order.num}]]</th>
+					<th>[[#{data.item.name}]]</th>
+					<th>[[#{data.unit.price}]]</th>
+					<th>[[#{data.order.num}]]</th>
 					<th>[[#{data.subtotal}]]</th>
 				</tr>
-				<tr th:each="item:${basketBean}">
-					<td th:text="${item.name}"></td>
-					<span th:if="*{image != null}">
-						<img th:src="@{/images/{image}(image=*{image})}"></img>
-					</span>
-					<span th:if="*{image == null}">
-						<img th:src="@{/images/common/no_image.jpg}"></img>
-					</span>
-					<td th:text="${item.price}"></td>
-					<td th:text="${item.orderNum}"></td>
-					<td th:text="${item.subtotal}"></td>
+				<tr th:each="orderItem: ${orderItemBeans}">
+					<td th:text="${orderItem.name}"></td>
+					<td th:text="${orderItem.price}"></td>
+					<td th:text="${orderItem.orderNum}"></td>
+					<td th:text="${orderItem.subtotal}"></td>
 				</tr>
 				<tr>
-					<td colspan="3"></td>
+					<td colspan="2"></td>
 					<td class="total">[[#{data.total}]]</td>
 					<td th:text="${total}"></td>
 				</tr>
 			</tbody>
 		</table>
 
-		<div class="user_info_form_area">
-			<table class="detail_table address" th:object="${order}">
+		<div class="user_info_form_area" th:object="${session.orderForm}">
+			<table class="detail_table address" >
 				<caption class="table_caption">[[#{data.address.address}]]</caption>
 				<tbody>
 					<tr>

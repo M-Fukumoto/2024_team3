@@ -215,6 +215,10 @@ public class ClientItemShowController {
 		// レビュー投稿リンクを追加に設定
 		model.addAttribute("save", "add");
 		
+		// 評価の平均を取得
+		//model.addAttribute("evaluationAvg", reviewRepository.findByItemAvgEvaluation(item));
+		//System.out.println(reviewRepository.findByItemAvgEvaluation(item));
+		
 		// 初回起動時
 		if(reviewForm.getEvaluation() == null) {
 			// ログイン済み
@@ -230,7 +234,7 @@ public class ClientItemShowController {
 				
 				// 購入済みの場合、レビュー投稿済かを確認
 				Review review = reviewRepository.findByUserAndItemAndDeleteFlag(user, item, 0);
-				if (review != null || buyFlg) {
+				if (review != null && buyFlg) {
 					// 投稿済の場合レビューフォームに値をセット
 					reviewForm.setName(review.getName());
 					reviewForm.setEvaluation(review.getEvaluation());
@@ -243,6 +247,7 @@ public class ClientItemShowController {
 		} else {
 			// 入力エラー時
 			buyFlg = true;
+			
 			// 更新用リンクを設定
 			model.addAttribute("save", "update");
 		}

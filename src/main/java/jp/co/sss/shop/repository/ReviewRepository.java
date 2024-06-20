@@ -40,4 +40,12 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 	 */
 	@Query("SELECT r FROM Review r WHERE deleteFlag = 0 AND Item = :item AND ROWNUM <= 3")
 	List<Review> findByDeleteFlagAndItemAnd3Rownum(Item item);
+	
+	/**
+	 * 評価取り出し
+	 * @param item
+	 * @return
+	 */
+	@Query("SELECT AVG(r.evaluation) FROM Review r WHERE Item = :item")
+	Review findByItemAvgEvaluation(Item item);
 }

@@ -87,6 +87,21 @@ public class ClientUserRegistController {
 		return "client/user/regist_input";
 
 	}
+	
+	@RequestMapping(path = "/client/user/regist/input", method = RequestMethod.POST)
+	public String registInputpost(Model model) {
+
+		UserForm userForm = (UserForm) session.getAttribute("userForm");
+		session.setAttribute("userForm", userForm);
+		if (userForm == null) {
+			// セッション情報がない場合、エラー
+			return "redirect:/syserror";
+		}
+
+		// 入力画面　表示
+		return "redirect:/client/user/regist/input";
+
+	}
 
 	/**
 	 * 登録入力確認　処理

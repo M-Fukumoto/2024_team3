@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title th:text="#{user}+#{title.input.check}+' | '+ #{shop.title}"> </title>
 </head>
 <body>
 </body><!DOCTYPE html>
@@ -45,7 +45,7 @@
 		<form th:action="@{/client/user/regist/complete}"  method="post" class="user_info_form">
 			<input type="submit" value="登録" class="send_button" />
 		</form>
-		<form th:action="@{/client/user/regist/input/check}" method="post">
+		<form th:action="@{/client/user/regist/input}" method="post">
 			<input type="submit" value="戻る" class="back_button" />
 		</form>
 	</div>

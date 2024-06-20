@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
 	th:replace="~{common/layout_5block :: layout(~{::title},~{::body/content()})}">
 
 <head>
@@ -9,17 +9,18 @@
 
 <body class="user">
 
-		<article class="main">
-			
-	<h2 class="title">注文完了</h2>
-	<p class="complete_message">
-		<span>ご注文ありがとうございます。 </span>
-		<br>
-		<span>注文手続きが完了しました。 </span>
-	</p>
-	<p class="complete_link"><a th:href="@{/}">トップへ戻る </a></p>
+	<article class="main">
 
-		</article>
-		
+		<h2 class="title" th:text="${title.order.complete}"></h2>
+		<p class="complete_message">
+			<span th:text="${msg.order.complete1}"></span>
+			<br>
+			<span th:text="${msg.order.complete2}"></span>
+		</p>
+		<p class="complete_link"><a th:href="@{/}" th:text="${msg.back.to.top}"></a></p>
+
+	</article>
+
 </body>
+
 </html>

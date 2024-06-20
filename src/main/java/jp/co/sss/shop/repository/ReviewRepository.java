@@ -22,16 +22,22 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 	 * レビュー情報を登録日付順に取得
 	 * @author ko teiketsu
 	 */
-	List<Review> findByItemOrderByInsertDateDesc(Item item);
+	List<Review> findByItemAndDeleteFlagOrderByInsertDateDesc(Item item,Integer DdeleteFlag);
 	
 	/**
 	 * ユーザとアイテムを条件にレビューを取得
 	 * @param user
 	 * @return
 	 */
-	Review findByUserAndItem(User user,Item item);
+	Review findByUserAndItemAndDeleteFlag(User user,Item item,Integer deleteFlag);
 	
-	// 3件
-	@Query("SELECT r FROM Review r WHERE ROWNUM <= 1")
-	List<Review> findAll3();
+	
+	/**
+	 * アイテムを条件にレビューを3件取得
+	 * @author ryosuke sakagami
+	 * @param item
+	 * @return
+	 */
+	@Query("SELECT r FROM Review r WHERE deleteFlag = 0 AND Item = :item AND ROWNUM <= 3")
+	List<Review> findByDeleteFlagAndItemAnd3Rownum(Item item);
 }

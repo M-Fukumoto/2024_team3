@@ -78,13 +78,13 @@ public class ClientBasketController {
 	 * @return
 	 */
 	@PostMapping("/client/basket/add")
-	public String addBasket(Integer itemId) {
+	public String addBasket(Integer id) {
 		// セッションスコープに買い物かご情報があるかを確認
 		if (session.getAttribute("basket") == null) {
 			// なければ、買い物かご情報を生成
 			basket = new ArrayList<BasketBean>();
 			// アイテム情報を取得
-			 Item item = iR.getReferenceById(itemId);
+			 Item item = iR.getReferenceById(id);
 			// 買い物かごにアイテムを追加
 			BasketBean bB = new BasketBean(item.getId(),item.getName(),item.getStock());
 			basket.add(bB);
@@ -98,7 +98,7 @@ public class ClientBasketController {
 				// カート内アイテムの取り出し
 				BasketBean bB = basket.get(i);
 
-				if (bB.getId() == itemId) {
+				if (bB.getId() == id) {
 					bB.setOrderNum(bB.getOrderNum() + 1);
 				}
 				// 存在しない場合
@@ -111,7 +111,7 @@ public class ClientBasketController {
 		// セッションに買い物かごデータを代入
 		session.setAttribute("basket", basket);
 		// カート一覧画面に遷移
-		return "redilect:/client/basket/list";
+		return "redirect:/client/basket/list";
 	}
 	
 	/**

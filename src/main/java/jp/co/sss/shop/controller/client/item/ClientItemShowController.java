@@ -170,7 +170,7 @@ public class ClientItemShowController {
 	* @param model  Viewとの値受渡し
 	* @return "client/item/detail" 詳細画面 表示
 	*/
-	@RequestMapping(path = "/client/item/detail/{id}", method = {RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(path = "/client/item/detail/{id}", method = { RequestMethod.GET, RequestMethod.POST })
 	public String showItem(@ModelAttribute ReviewForm reviewForm, @PathVariable int id, Model model) {
 
 		// 対象の商品情報を取得
@@ -190,55 +190,56 @@ public class ClientItemShowController {
 		// レビュー格納用のリストを作成
 		List<Review> reviewList = new ArrayList<Review>();
 
-		// レビューを全件検索(新着順)
-		reviewList = reviewRepository.findByItemOrderByInsertDateDesc(item);
-
+		// レビューを全件取得(新着順)
+		reviewList = reviewRepository.findByItemAndDeleteFlagOrderByInsertDateDesc(item,0);
+		// 最初の3件以外削除
+		for(int i = 3;i <= reviewList.size();i++) {
+			reviewList.remove(i);
+		}
+		
 		// レビューが存在する場合、Viewへ渡す
 		if (!reviewList.isEmpty()) {
 			model.addAttribute("reviews", reviewList);
 		}
 		// 購入確認フラグを作成
-		boolean buyFlg;
-		
-		// レビュー投稿リンクを追加に設定
-		model.addAttribute("save","add");
+		boolean buyFlg = false;
 
-		// 入力エラーの場合
-		if (reviewForm == null) {
-			buyFlg = true;
-		} else {
-			// ログイン済みの場合
-			User user = new User();
+		// レビュー投稿リンクを追加に設定
+		model.addAttribute("save", "add");
+		
+		// 初回起動時
+		if(reviewForm.getEvaluation() == null) {
+			// ログイン済み
 			if (session.getAttribute("user") != null) {
 				// 購入済み確認用会員情報を作成
 				UserBean userBean = (UserBean) session.getAttribute("user");
-				user = userRepository.getReferenceById(userBean.getId());
-
+				User user = userRepository.getReferenceById(userBean.getId());
 				// 購入済みかを確認
 				if (!orderItemRepository.findByUserAndItemAndDeleteFlag(user, item).isEmpty()) {
 					// 購入済みの場合
 					buyFlg = true;
-
-					// レビュー投稿済かを確認
-					Review review = reviewRepository.findByUserAndItem(user, item);
-					if (review != null) {
-
-						// 投稿済の場合レビューフォームに値をセット
-						reviewForm.setName(review.getName());
-						reviewForm.setEvaluation(review.getEvaluation());
-						reviewForm.setCommentReview(review.getCommentReview());
-						model.addAttribute("reviewForm", reviewForm);
-						// 更新用リンクを設定
-						model.addAttribute("save","update");
-					}
-				} else {
-					buyFlg = false;
 				}
-			} else {
-				buyFlg = false;
+				
+				// 購入済みの場合、レビュー投稿済かを確認
+				Review review = reviewRepository.findByUserAndItemAndDeleteFlag(user, item, 0);
+				if (review != null || buyFlg) {
+					// 投稿済の場合レビューフォームに値をセット
+					reviewForm.setName(review.getName());
+					reviewForm.setEvaluation(review.getEvaluation());
+					reviewForm.setCommentReview(review.getCommentReview());
+					model.addAttribute("reviewForm", reviewForm);
+					// 更新用リンクを設定
+					model.addAttribute("save", "update");
+				}
 			}
-
+		} else {
+			// 入力エラー時
+			buyFlg = true;
+			// 更新用リンクを設定
+			model.addAttribute("save", "update");
 		}
+		
+		
 
 		// 購入情報をViewへ渡す
 		model.addAttribute("buyFlg", buyFlg);
@@ -249,15 +250,15 @@ public class ClientItemShowController {
 	//入力チェックメソッド
 
 	@PostMapping("/client/review/add/{id}")
-	public String addReview(@Valid @ModelAttribute ReviewForm reviewForm,BindingResult result, Model model,@PathVariable int id
-			) {
+	public String addReview(@Valid @ModelAttribute ReviewForm reviewForm, BindingResult result, Model model,
+			@PathVariable int id) {
 
 		// エラーの有無を確認
 		if (result.hasErrors()) {
 			// 入力値にエラーがあった場合、エラー情報をセッションに保持
 			session.setAttribute("result", result);
 			// 商品詳細にフォワード 要修正
-			return "forward:/client/item/detail/"+id;
+			return "forward:/client/item/detail/" + id;
 		}
 
 		// 保存用エンティティを作成
@@ -279,33 +280,32 @@ public class ClientItemShowController {
 		review.setItem(item);
 		// 値をセーブ
 		reviewRepository.save(review);
-	
 
 		// 商品詳細にredirect
 		return "redirect:/client/item/detail/" + id;
 	}
 
 	@PostMapping("/client/review/update/{id}")
-	public String updateReview(@Valid @PathVariable int id, @ModelAttribute ReviewForm reviewForm, Model model,
-			BindingResult result) {
+	public String updateReview(@Valid @ModelAttribute ReviewForm reviewForm, BindingResult result, Model model,
+			@PathVariable int id) {
 
 		// エラーの有無を確認
 		if (result.hasErrors()) {
 			// 入力値にエラーがあった場合、エラー情報をセッションに保持
 			session.setAttribute("result", result);
 			// 商品詳細にフォワード 要修正
-			return "forward:/client/item/detail/"+id;
+			return "forward:/client/item/detail/" + id;
 		}
 		// アイテム情報取得
 		Item item = itemRepository.findByIdAndDeleteFlag(id, Constant.NOT_DELETED);
 		// ユーザー情報
 		UserBean userBean = (UserBean) session.getAttribute("user");
 		User user = userRepository.getReferenceById(userBean.getId());
-		
+
 		// 保存用エンティティを作成
 		Review review = new Review();
 		// 既存データをレビューエンティティにセット
-		review = reviewRepository.findByUserAndItem(user, item);
+		review = reviewRepository.findByUserAndItemAndDeleteFlag(user, item, 0);
 		// 更新内容をレビューエンティティにセット
 		// 投稿者名
 		review.setName(reviewForm.getName());

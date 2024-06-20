@@ -39,6 +39,7 @@
 		<div class="detail_button_area">
 			<form th:if="${item.stock} ge 1" th:action="@{/client/basket/add}" method="post">
 				<input type="submit" value="買い物かごに入れる" class="intobasket_button" />
+				<input type="hidden" name="id" th:value="${item.id}" />
 			</form>
 
 			<form th:action="@{/client/item/list/1}" method="post">
@@ -51,7 +52,8 @@
 
 		<div class="item_detail_review_form_alia">
 			<!--/* 入力フォーム */-->
-			<form th:action="@{/client/review/{save}/{id}(save=${save},id=${item.id})}" method="post" th:object="${reviewForm}">
+			<form th:action="@{/client/review/{save}/{id}(save=${save},id=${item.id})}" method="post"
+				th:object="${reviewForm}">
 				<ul class="input_list">
 					<li><span class="input_title">投稿者名</span><input type="text" th:field="*{name}" /></li>
 					<li><span class="input_title">評価</span>
@@ -72,11 +74,19 @@
 						<p class="input_title">コメント</p><textarea th:field="*{commentReview}"></textarea>
 					</li>
 					<li th:if="${buyFlg}">
-						<input  th:if="${save}==add" type="submit" value="投稿" />
-						<input  th:if="${save}==update" type="submit" value="更新" />
-						</li>
+						<input th:if="${save}==add" type="submit" value="投稿" />
+						<input th:if="${save}==update" type="submit" value="更新" />
+					</li>
 					<li th:if="!${buyFlg}">レビューを投稿するには商品を購入している必要があります。</li>
 				</ul>
+
+				<th:block th:if="${#fields.hasErrors()}">
+					<ul class="error_list">
+						<li th:each="err:${#fields.detailedErrors()}" th:text="${err.message}"></li>
+					</ul>
+					<br />
+				</th:block>
+
 			</form>
 
 			<!--			<form th:action="@{/client/review/add/{id}(id=item.id)}" method="post">-->
@@ -125,17 +135,17 @@
 			</div>
 		</th:block>
 
-<!--		/* 一覧表示 */-->
-<!--		<div class="item_detail_review_list_alia">-->
-<!--			/* 一覧表示 CSS確認用 */-->
-<!--			<ul class="input_list">-->
-<!--				<li>坂上</li>-->
-<!--				<li class="review_star">★☆☆☆☆</li>-->
-<!--				<li>2024/11/14</li>-->
-<!--				<li>おもろい</li>-->
-<!--			</ul>-->
-<!--			<a th:href="@{/client/item/review/{id}(id=${item.id})}">レビュー一覧</a>-->
-<!--		</div>-->
+		<!--		/* 一覧表示 */-->
+		<!--		<div class="item_detail_review_list_alia">-->
+		<!--			/* 一覧表示 CSS確認用 */-->
+		<!--			<ul class="input_list">-->
+		<!--				<li>坂上</li>-->
+		<!--				<li class="review_star">★☆☆☆☆</li>-->
+		<!--				<li>2024/11/14</li>-->
+		<!--				<li>おもろい</li>-->
+		<!--			</ul>-->
+		<!--			<a th:href="@{/client/item/review/{id}(id=${item.id})}">レビュー一覧</a>-->
+		<!--		</div>-->
 
 	</div>
 </body>

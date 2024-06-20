@@ -42,7 +42,7 @@ public class ReviewController {
 		// レビュー格納用のリストを作成
 		List<Review> reviewList = new ArrayList<Review>();
 		// レビューを全件検索(新着順)
-		reviewList = reviewRepository.findByItemOrderByInsertDateDesc(item);
+		reviewList = reviewRepository.findByItemAndDeleteFlagOrderByInsertDateDesc(item,0);
 		// レビューをViewへ渡す
 		model.addAttribute("reviews", reviewList);
 		// 商品情報をViewへ渡す
@@ -70,7 +70,7 @@ public class ReviewController {
 		// レビュー格納用のリストを作成
 		List<Review> reviewList = new ArrayList<Review>();
 		// レビューを全件検索(新着順)
-		reviewList = reviewRepository.findByItemOrderByInsertDateDesc(item);
+		reviewList = reviewRepository.findByItemAndDeleteFlagOrderByInsertDateDesc(item,0);
 		// レビューをViewへ渡す
 		model.addAttribute("reviews", reviewList);
 		// 商品情報をViewへ渡す

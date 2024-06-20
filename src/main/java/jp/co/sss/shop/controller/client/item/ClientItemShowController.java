@@ -219,13 +219,17 @@ public class ClientItemShowController {
 		//model.addAttribute("evaluationAvg", reviewRepository.findByItemAvgEvaluation(item));
 		//System.out.println(reviewRepository.findByItemAvgEvaluation(item));
 		
+		
+		User user = new User();
+		if (session.getAttribute("user") != null) {
+			UserBean userBean = (UserBean) session.getAttribute("user");
+			user = userRepository.getReferenceById(userBean.getId());
+		}
+		
 		// 初回起動時
 		if(reviewForm.getEvaluation() == null) {
 			// ログイン済み
 			if (session.getAttribute("user") != null) {
-				// 購入済み確認用会員情報を作成
-				UserBean userBean = (UserBean) session.getAttribute("user");
-				User user = userRepository.getReferenceById(userBean.getId());
 				// 購入済みかを確認
 				if (!orderItemRepository.findByUserAndItemAndDeleteFlag(user, item).isEmpty()) {
 					// 購入済みの場合
@@ -247,9 +251,10 @@ public class ClientItemShowController {
 		} else {
 			// 入力エラー時
 			buyFlg = true;
-			
 			// 更新用リンクを設定
-			model.addAttribute("save", "update");
+			if (reviewRepository.findByUserAndItemAndDeleteFlag(user, item, 0) != null) {
+				model.addAttribute("save", "update");
+			}
 		}
 		
 		

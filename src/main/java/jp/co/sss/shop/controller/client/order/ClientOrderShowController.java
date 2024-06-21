@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import jakarta.servlet.http.HttpSession;
 import jp.co.sss.shop.bean.OrderBean;
 import jp.co.sss.shop.bean.OrderItemBean;
+import jp.co.sss.shop.bean.UserBean;
 import jp.co.sss.shop.entity.Order;
 import jp.co.sss.shop.entity.OrderItem;
+import jp.co.sss.shop.entity.User;
 import jp.co.sss.shop.repository.OrderRepository;
+import jp.co.sss.shop.repository.UserRepository;
 import jp.co.sss.shop.service.BeanTools;
 import jp.co.sss.shop.service.PriceCalc;
 
@@ -36,6 +38,9 @@ public class ClientOrderShowController {
 	 */
 	@Autowired
 	OrderRepository orderRepository;
+
+	@Autowired
+	UserRepository userRepository;
 
 	/**
 	 * セッション
@@ -65,8 +70,14 @@ public class ClientOrderShowController {
 	@RequestMapping(path = "/client/order/list", method = { RequestMethod.GET, RequestMethod.POST })
 	public String showOrderList(Model model, Pageable pageable) {
 
+		//セッションスコープからログイン会員情報を取得
+		UserBean userBean = (UserBean) session.getAttribute("user");
+
+		//取得したログイン会員情報のユーザIDを条件にDBからユーザ情報を取得
+		User user = userRepository.getReferenceById(userBean.getId());
+
 		// すべての注文情報を取得(注文日降順)
-		Page<Order> orderList = orderRepository.findAllOrderByInsertdateDescIdDesc(pageable);
+		List<Order> orderList = orderRepository.findByUserOrderByInsertDateDesc(user);
 
 		// 注文情報リストを生成
 		List<OrderBean> orderBeanList = new ArrayList<OrderBean>();

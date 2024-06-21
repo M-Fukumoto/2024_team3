@@ -291,8 +291,7 @@ public class ClientOrderRegistController {
 		
 
 		// 注文商品情報の登録処理
-		// 注文商品エンティティの作成
-		OrderItem orderItem = new OrderItem();
+
 		// 注文リストを作成
 		List<OrderItem> orderItemList = new ArrayList<OrderItem>();
 		for (int i = 0; i < basket.size(); i++) {
@@ -303,6 +302,8 @@ public class ClientOrderRegistController {
 			
 			// 買い物かごの商品とアイテムデータから画面表示用注文詳細を作成
 			orderItemBean = beanTools.generateOrderItemBean(item, bB);
+			// 注文商品エンティティの作成
+			OrderItem orderItem = new OrderItem();
 			// エンティティにコピー
 			BeanUtils.copyProperties(orderItemBean, orderItem,"id");
 			// リストに追加

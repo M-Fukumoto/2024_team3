@@ -68,7 +68,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	 * @author sakagami ryosuke
 	 * @return 商品エンティティ
 	 */
-	List<Item> findAllByOrderByInsertDate();
+	List<Item> findAllByOrderByInsertDateDesc();
 	
 	/**
 	 * カテゴリを条件に商品を新着順で表示

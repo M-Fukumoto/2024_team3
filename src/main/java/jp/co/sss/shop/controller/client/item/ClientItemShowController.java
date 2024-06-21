@@ -94,7 +94,7 @@ public class ClientItemShowController {
 
 		if (itemsList == null) {
 			// 商品情報を全件検索(新着順)
-			itemsList = itemRepository.findAllByOrderByInsertDate();
+			itemsList = itemRepository.findAllByOrderByInsertDateDesc();
 			//新着商品あり：一覧表示の並び順を「新着順」にする
 			sortType = 1;
 		}
@@ -143,7 +143,7 @@ public class ClientItemShowController {
 			// 並び順を元に商品一覧を取得
 			if (this.sortType == 1) {
 				// 商品情報を全件検索(新着順)
-				itemsList = itemRepository.findAllByOrderByInsertDate();
+				itemsList = itemRepository.findAllByOrderByInsertDateDesc();
 			} else if (this.sortType == 2) {
 				// 商品情報を全件検索(売れ筋順)
 				itemsList = itemRepository.findAllByOrderByCountAllDesc();

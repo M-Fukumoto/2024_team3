@@ -752,3 +752,29 @@ p.link_center {
 .review_star {
 	color: rgb(255, 128, 64);
 }
+
+.item_detail_review_list_alia .input_list{
+	border: 1px solid;
+	padding: 3%;
+	padding: 3%;
+	margin: 2%;
+}
+
+#insertDate{
+	color:rgb(151, 151, 151);
+}
+
+.item_detail_review_list_alia li{
+	margin-bottom: 0%;
+}
+
+.review_list .input_list{
+	border: 1px solid;
+	padding: 3%;
+	margin: 2%;
+}
+
+.review_list .input_list li{
+	margin-bottom: 0%;
+}
+

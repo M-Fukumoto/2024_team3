@@ -18,12 +18,11 @@
 
 		<!--エラー-->
 		<div th:if="!${#lists.isEmpty(stockZeroItems) && #lists.isEmpty(stockLackItems)}">
-			<br>
 			<ul class="error_list_no_mark" th:each="stockZeroItem:${stockZeroItems}">
-				<li th:text="${stockZeroItem}+は在庫切れです。他の商品を選択してください。"></li>
+				<li th:text="#{msg.basket.stock.none(${stockZeroItem})}"></li>
 			</ul>
 			<ul class="error_list_no_mark" th:each="stockLackItem:${stockLackItems}">
-				<li th:text="${stockLackItem}+は在庫不足のため、数をふやすことはできません。"></li>
+				<li th:text="#{msg.basket.stock.short(${stockLackItem})}"></li>
 			</ul>
 			<br>
 		</div>

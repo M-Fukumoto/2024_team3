@@ -197,10 +197,14 @@ public class ClientOrderRegistController {
 					stockLackItems.add(bB.getName());
 					// 在庫数にあわせて、買い物かご情報を更新（注文数、在庫数）
 					bB.setOrderNum(bB.getStock());
+					// リストに保存
+					basket.set(i, bB);
 				}
+			} else {
+				// リストに保存
+				basket.set(i, bB);
 			}
-			// リストに保存
-			basket.set(i, bB);
+
 		}
 
 		// 在庫状況を反映した買い物かご情報をセッションに保存
@@ -296,6 +300,7 @@ public class ClientOrderRegistController {
 			BasketBean bB = basket.get(i);
 			// 該当アイテム詳細を取り出し
 			Item item = itemRepository.getReferenceById(bB.getId());
+			
 			// 買い物かごの商品とアイテムデータから画面表示用注文詳細を作成
 			orderItemBean = beanTools.generateOrderItemBean(item, bB);
 			// エンティティにコピー
@@ -310,6 +315,10 @@ public class ClientOrderRegistController {
 			orderItem.setQuantity(orderItemBean.getOrderNum());
 			// DBに登録
 			orderItemRepository.save(orderItem);
+			
+			// 商品の在庫数を更新
+			item.setStock(item.getStock()- orderItemBean.getOrderNum());
+			itemRepository.save(item);
 		}
 
 		

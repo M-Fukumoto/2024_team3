@@ -12,7 +12,20 @@
 	<article class="main">
 
 		<h2 class="title" th:text="#{title.order.check}"></h2>
-		<p class="check_message" th:text="#{msg.order.check}"></p>
+		<p  th:if="!${#lists.isEmpty(session.basket)}" class="check_message" th:text="#{msg.order.check}"></p>
+		<p  th:if="${#lists.isEmpty(session.basket)}" class="check_error_message" th:text="#{msg.order.stop}"></p>
+
+		<div th:if="!${#lists.isEmpty(stockZeroItems) or #lists.isEmpty(stockLackItems)}">
+			<br>
+			<ul class="error_list_no_mark" th:each="stockZeroItem:${stockZeroItems}">
+				<li th:text="${stockZeroItem}+は在庫切れの為注文できません。"></li>
+			</ul>
+			<ul class="error_list_no_mark" th:each="stockLackItem:${stockLackItems}">
+				<li th:text="${stockLackItem}+は在庫不足のため、在庫数分のみ注文できます。"></li>
+			</ul>
+			<br>
+		</div>
+
 		<table class="list_table item_detail">
 			<tbody>
 				<tr>
@@ -36,7 +49,7 @@
 		</table>
 
 		<div class="user_info_form_area" th:object="${session.orderForm}">
-			<table class="detail_table address" >
+			<table class="detail_table address">
 				<caption class="table_caption">[[#{data.address.address}]]</caption>
 				<tbody>
 					<tr>

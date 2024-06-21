@@ -251,7 +251,7 @@ public class ClientOrderRegistController {
 	@RequestMapping(path = "/client/order/payment/back", method = RequestMethod.POST)
 	public String orderPaymentBack() {
 		// 支払い方法選択画面 表示処理へリダイレクト
-		return "redirect:/client/order/address/input";
+		return "redirect:/client/order/payment/input";
 	}
 
 	@RequestMapping(path = "/client/order/complete", method = RequestMethod.POST)

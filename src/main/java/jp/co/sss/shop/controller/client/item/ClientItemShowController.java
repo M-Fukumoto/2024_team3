@@ -116,7 +116,7 @@ public class ClientItemShowController {
 	* @param model  Viewとの値受渡し
 	* @return "client/item/detail" 詳細画面 表示
 	*/
-	@RequestMapping(path = "/client/item/list/{sortType}", method = { RequestMethod.GET })
+	@RequestMapping(path = "/client/item/list/{sortType}", method = { RequestMethod.GET , RequestMethod.POST})
 	public String showItems(@PathVariable int sortType, Integer categoryId, Model model) {
 
 		if (categoryId == null) {

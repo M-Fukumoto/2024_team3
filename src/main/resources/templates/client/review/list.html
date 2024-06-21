@@ -34,7 +34,7 @@
 
 	<!--/* 一覧表示 */-->
 	<th:block th:if="!${#lists.isEmpty(reviews)}">
-		<div>
+		<div class="review_list">
 			<ul th:each="review: ${reviews}" class="input_list">
 				<li th:text="${review.name}"></li>
 				<li class="review_star" th:switch="${review.evaluation}">
@@ -44,7 +44,9 @@
 					<span th:case="4">★★★★☆</span>
 					<span th:case="5">★★★★★</span>
 				</li>
-				<li th:text="${review.insertDate}"></li>
+				<!--<li th:text="${review.insertDate}"></li>-->
+				<li th:text="${#dates.format(new java.util.Date(review.insertDate), 'yyyy/MM/dd')}"></li>
+
 				<li th:text="${review.commentReview}"></li>
 			</ul>
 		</div>

@@ -203,7 +203,7 @@ public class ClientItemShowController {
 		// 3件取得用のレビューリスト
 		List<Review> reviewList3 = new ArrayList<Review>();
 		// 最初の3件以外削除
-		for(int i = 0;i < reviewList.size();i++) {
+		for(int i = 0;i < 3;i++) {
 			reviewList3.add(reviewList.get(i));
 		}
 		

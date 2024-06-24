@@ -200,14 +200,16 @@ public class ClientItemShowController {
 
 		// レビューを全件取得(新着順)
 		reviewList = reviewRepository.findByItemAndDeleteFlagOrderByInsertDateDesc(item,0);
+		// 3件取得用のレビューリスト
+		List<Review> reviewList3 = new ArrayList<Review>();
 		// 最初の3件以外削除
-		for(int i = 3;i <= reviewList.size();i++) {
-			reviewList.remove(i);
+		for(int i = 0;i < reviewList.size();i++) {
+			reviewList3.add(reviewList.get(i));
 		}
 		
 		// レビューが存在する場合、Viewへ渡す
 		if (!reviewList.isEmpty()) {
-			model.addAttribute("reviews", reviewList);
+			model.addAttribute("reviews", reviewList3);
 		}
 		// 購入確認フラグを作成
 		boolean buyFlg = false;

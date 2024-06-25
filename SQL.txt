@@ -105,6 +105,24 @@ INSERT INTO order_items VALUES(seq_order_items.NEXTVAL, 4, 1, 1, 100);
 INSERT INTO order_items VALUES(seq_order_items.NEXTVAL, 4, 2, 1, 100);
 INSERT INTO order_items VALUES(seq_order_items.NEXTVAL, 4, 3, 1, 100);
 
+-- レビューテーブル
+CREATE TABLE review(
+ID NUMBER(6) PRIMARY KEY,
+NAME VARCHAR2(40) NOT NULL,
+evaluation NUMBER(1) NOT NULL,
+comment_review VARCHAR2(400),
+insert_date DATE DEFAULT SYSDATE,
+item_id NUMBER(6) REFERENCES items(id),
+user_id NUMBER(6) REFERENCES users(id),
+delete_flag NUMBER(1) DEFAULT 0
+);
+
+--シーケンス定義
+CREATE SEQUENCE seq_review
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
+
 -- コミット
 COMMIT;
 

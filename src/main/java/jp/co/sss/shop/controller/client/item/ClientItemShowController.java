@@ -203,12 +203,12 @@ public class ClientItemShowController {
 		// 3件取得用のレビューリスト
 		List<Review> reviewList3 = new ArrayList<Review>();
 		// 最初の3件以外削除
-		for(int i = 0;i < 3;i++) {
+		for(int i = 0;i < 3 && i < reviewList.size();i++) {
 			reviewList3.add(reviewList.get(i));
 		}
 		
 		// レビューが存在する場合、Viewへ渡す
-		if (!reviewList.isEmpty()) {
+		if (!reviewList3.isEmpty()) {
 			model.addAttribute("reviews", reviewList3);
 		}
 		// 購入確認フラグを作成
